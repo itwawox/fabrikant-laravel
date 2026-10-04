@@ -20,7 +20,7 @@
             <div class="contact__actions">
                 <a class="gz-plaque contact__action" href="/menu">Меню ресторана</a>
                 <a class="gz-plaque contact__action" href="/">На главную</a>
-                <a class="gz-plaque contact__action" href="tel:+79788072001">Позвонить</a>
+                <a class="gz-plaque contact__action" href="{{ $site->tel() }}">Позвонить</a>
             </div>
         </div>
     </section>

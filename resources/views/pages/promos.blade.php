@@ -50,8 +50,8 @@
           </div>
 
           <p class="gazette__strip">
-            <span>Симферополь, ул. Киевская, 54.</span>
-            <span>тел. <a href="tel:+79788072001">+7 978 807 20 01</a></span>
+            <span>{{ $site->city() }}, {{ $site->streetAddress() }}.</span>
+            <span>тел. <a href="{{ $site->tel() }}">{{ $site->phone() }}</a></span>
             <span><a href="/menu">Меню ресторана</a></span>
           </p>
         </div>

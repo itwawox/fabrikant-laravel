@@ -55,7 +55,8 @@ function memory(mode) {
 // Цель в Яндекс.Метрике: чем на странице меню пользуются. Счётчик мог не загрузиться — тогда молча
 function goal(name) {
     try {
-        window.yaCounter26918373.reachGoal(name);
+        // Номер счётчика задаётся в настройках сайта — ищем счётчик по имени yaCounter…
+        window[Object.keys(window).find((key) => /^yaCounter\d+$/.test(key))].reachGoal(name);
     } catch (error) {
         // счётчик заблокирован или ещё не готов
     }

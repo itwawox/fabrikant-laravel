@@ -14,7 +14,11 @@ use App\Models\PromoBlackout;
 use App\Services\Menu\GhostscriptRenderer;
 use App\Services\Menu\PdfRenderer;
 use App\Services\Menu\PopplerRenderer;
+use App\Support\Site;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Spatie\LaravelSettings\Events\SettingsSaved;
 use Spatie\ResponseCache\Facades\ResponseCache;
 
 class AppServiceProvider extends ServiceProvider
@@ -49,7 +53,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Контакты из настроек сайта — во всех шаблонах сайта как $site
+        View::composer(['components.layouts.site', 'pages.*', 'errors.*', 'errors::*'], fn ($view) => $view->with('site', app(Site::class)));
+
         // Страниц шесть, правки редкие — проще сбросить кэш целиком, чем вычислять, какие страницы задеты
+        Event::listen(SettingsSaved::class, fn () => ResponseCache::clear());
         foreach (self::SITE_MODELS as $model) {
             $model::saved(fn () => ResponseCache::clear());
             $model::deleted(fn () => ResponseCache::clear());

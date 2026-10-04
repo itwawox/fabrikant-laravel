@@ -12,7 +12,8 @@ document.addEventListener('click', (event) => {
     const link = event.target instanceof Element ? event.target.closest('[data-goal]') : null;
     if (link) {
         try {
-            window.yaCounter26918373.reachGoal(link.dataset.goal);
+            // Номер счётчика задаётся в настройках сайта — ищем счётчик по имени yaCounter…
+            window[Object.keys(window).find((key) => /^yaCounter\d+$/.test(key))].reachGoal(link.dataset.goal);
         } catch (error) {
             // счётчик недоступен
         }

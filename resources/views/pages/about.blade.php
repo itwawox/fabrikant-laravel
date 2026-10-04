@@ -4,10 +4,10 @@
     // «О ресторане» — очерк в стиле газеты-меню. Шапка, рубрики, колонтитул и приглашение в конце —
     // те же детали, что в галерее (press.css); своё у очерка — колонки текста, сорта пива,
     // плашка «Своими руками» и объявление о работе (story.css). Тексты переедут в админку на этапе 6.
-    $phone = ['tel:+79788072001', '+7 978 807 20 01'];
-    $mail = 'info@fabrikant-simf.ru';
+    $phone = [$site->tel(), $site->phone()];
+    $mail = $site->email();
     // Маршрут в Яндекс Картах до ресторана — тот же, что на странице «Контакты»
-    $route = 'https://yandex.ru/maps/?rtext=~44.957436%2C34.109319&amp;rtt=auto';
+    $route = $site->routeUrl();
     // Сорта собственной пивоварни — как в печатном меню (страница 1, «Пиво собственного производства»)
     $beers = [
         'Пильзенское светлое' => 'алк. 4,8%',
@@ -48,7 +48,7 @@
             </nav>
             <p class="press-hero__lede">Островок уюта и комфорта в самом центре шумного города. Здесь всё настоящее: пиво из собственной пивоварни, вкуснейшее угощение, стильный интерьер.</p>
         </div>
-        <p class="press-hero__running">Ресторан-пивоварня &bull; Симферополь, Киевская, 54 &bull; Каждый день с 11:00 до 23:00</p>
+        <p class="press-hero__running">Ресторан-пивоварня &bull; {{ $site->city() }}, {{ $site->address() }} &bull; Каждый день с {{ $site->opensAt() }} до {{ $site->closesAt() }}</p>
     </section>
 
     <section class="gazette press story">
@@ -172,7 +172,7 @@
             <!-- Чем заканчивается очерк: приходите -->
             <aside class="press-cta" aria-labelledby="press-cta-title">
                 <h2 class="press-cta__title" id="press-cta-title">Ждём вас в гости</h2>
-                <p class="press-cta__text">Симферополь, Киевская,&nbsp;54. Открыто каждый день с&nbsp;11:00 до&nbsp;23:00.</p>
+                <p class="press-cta__text">{{ $site->city() }}, {{ $site->settings->street }},&nbsp;{{ $site->settings->house }}. Открыто каждый день с&nbsp;{{ $site->opensAt() }} до&nbsp;{{ $site->closesAt() }}.</p>
                 <div class="press-cta__actions">
                     <a class="press-cta__action press-cta__action--main" href="{{ $phone[0] }}" data-goal="about_call">
                         <span>Забронировать стол</span>
@@ -187,7 +187,7 @@
             </aside>
 
             <p class="gazette__strip">
-                <span>Симферополь, ул. Киевская, 54.</span>
+                <span>{{ $site->city() }}, {{ $site->streetAddress() }}.</span>
                 <span>тел. <a href="{{ $phone[0] }}">{{ $phone[1] }}</a></span>
                 <span><a href="/menu">Меню ресторана</a></span>
             </p>
