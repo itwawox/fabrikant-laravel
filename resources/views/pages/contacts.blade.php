@@ -54,6 +54,9 @@
                 <div class="contact__actions">
                     <a class="gz-plaque contact__action" href="{{ $rows['Телефон'][0] }}">Позвонить</a>
                     <a class="gz-plaque contact__action" href="{!! $route !!}" target="_blank" rel="noopener">Проложить маршрут</a>
+@if (\App\Http\Controllers\BookingController::available($site->settings))
+                    <a class="gz-plaque contact__action" href="{{ route('booking') }}">Заявка онлайн</a>
+@endif
                 </div>
                 <p class="contact__note">{{ $texts->get('note') }}</p>
             </div>

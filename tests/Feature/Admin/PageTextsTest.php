@@ -12,7 +12,7 @@ beforeEach(fn () => $this->actingAs(User::factory()->create()));
 
 it('creates a row for every page and opens them with the current texts', function () {
     Livewire::test(ListPages::class)->assertSee('О ресторане')->assertSee('Страница не найдена (404)');
-    expect(Page::count())->toBe(7);
+    expect(Page::count())->toBe(8);
 
     Livewire::test(EditPage::class, ['record' => Page::firstWhere('key', 'about')->getRouteKey()])
         ->assertFormSet([
