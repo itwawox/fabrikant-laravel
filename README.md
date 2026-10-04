@@ -12,8 +12,13 @@
 composer install
 cp .env.example .env && php artisan key:generate
 php artisan migrate
+php artisan storage:link
 php artisan make:filament-user     # первый пользователь админки
+php artisan legacy:import ~/Herd/fabrikant   # меню, акции, галерея со старого сайта
 ```
+
+`legacy:import` можно запускать повторно: он обновляет записи, а не дублирует. Правки из админки он
+перезапишет данными старого сайта.
 
 Сайт: http://fabrikant-laravel.test, админка: http://fabrikant-laravel.test/admin.
 
