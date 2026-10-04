@@ -154,7 +154,9 @@ it('imports gallery rubrics, photos and their copies', function () {
         ->and($fasad->variants['avif'])->toHaveCount(3);
 
     Storage::disk('public')->assertExists($fasad->variants['webp']['480']);
-    Storage::disk('public')->assertExists($fasad->source_path);
+    // Исходник — на закрытом диске: в нём EXIF с координатами
+    Storage::disk('local')->assertExists($fasad->source_path);
+    Storage::disk('public')->assertMissing($fasad->source_path);
 });
 
 it('can run again without duplicating anything', function () {

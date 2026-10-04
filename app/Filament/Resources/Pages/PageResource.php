@@ -32,6 +32,8 @@ class PageResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Страницы и тексты';
 
+    protected static ?string $navigationLabel = 'Страницы и тексты';
+
     protected static ?int $navigationSort = 10;
 
     public static function form(Schema $schema): Schema

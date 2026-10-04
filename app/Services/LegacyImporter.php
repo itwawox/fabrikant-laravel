@@ -208,7 +208,8 @@ class LegacyImporter
             $built = $build[$photo['id']] ?? [];
             $source = $photo['src'] ?? null;
             $sourcePath = $source ? 'gallery/source/'.basename($source) : null;
-            if ($source && ! $this->copy($source, $this->public(), (string) $sourcePath)) {
+            // Исходник — на закрытом диске: в нём EXIF с координатами, гостям он не нужен
+            if ($source && ! $this->copy($source, $this->private(), (string) $sourcePath)) {
                 $sourcePath = null;
             }
 
