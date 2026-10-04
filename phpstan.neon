@@ -8,3 +8,5 @@ parameters:
         - config
         - database
         - routes
+    # Типы атрибутов модели — из её casts() (enum-статусы и т. п.)
+    parseModelCastsMethod: true
