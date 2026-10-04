@@ -15,6 +15,9 @@ class MenusTable
     {
         return $table
             ->defaultSort('created_at', 'desc')
+            ->emptyStateHeading('Меню ещё не загружено')
+            ->emptyStateDescription('Нажмите «Загрузить новое меню» вверху справа и выберите PDF от типографии.')
+            ->emptyStateIcon('heroicon-o-book-open')
             // Пока какое-то меню обрабатывается, список обновляется сам
             ->poll(fn () => Menu::query()->where('status', MenuStatus::Processing)->exists() ? '3s' : null)
             ->columns([

@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Menus\Pages;
 
 use App\Filament\Resources\Menus\MenuResource;
 use App\Services\Menu\MenuPipeline;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -15,6 +16,17 @@ class CreateMenu extends CreateRecord
     protected static ?string $title = 'Новое меню';
 
     protected static bool $canCreateAnother = false;
+
+    public function getSubheading(): string
+    {
+        return '1. Выберите PDF от типографии → 2. Нажмите «Загрузить и обработать» и подождите полминуты → '
+            .'3. Проверьте разделы и нажмите «Опубликовать».';
+    }
+
+    protected function getCreateFormAction(): Action
+    {
+        return parent::getCreateFormAction()->label('Загрузить и обработать');
+    }
 
     /** @param  array<string, mixed>  $data */
     protected function handleRecordCreation(array $data): Model
