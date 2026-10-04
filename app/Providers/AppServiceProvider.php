@@ -11,6 +11,9 @@ use App\Models\MenuSection;
 use App\Models\MenuSectionBox;
 use App\Models\Promo;
 use App\Models\PromoBlackout;
+use App\Services\Menu\GhostscriptRenderer;
+use App\Services\Menu\PdfRenderer;
+use App\Services\Menu\PopplerRenderer;
 use Illuminate\Support\ServiceProvider;
 use Spatie\ResponseCache\Facades\ResponseCache;
 
@@ -30,7 +33,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Чем рисовать PDF меню: на хостинге только Ghostscript, локально можно poppler
+        $this->app->bind(PdfRenderer::class, function (): PdfRenderer {
+            $bin = config('menu.binaries');
+            $timeout = config('menu.timeout');
+
+            return config('menu.renderer') === 'poppler'
+                ? new PopplerRenderer($bin['pdftoppm'], $bin['pdfinfo'], $timeout)
+                : new GhostscriptRenderer($bin['gs'], $timeout);
+        });
     }
 
     /**
