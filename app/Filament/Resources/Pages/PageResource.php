@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Pages;
 
+use App\Enums\UserRole;
+use App\Filament\Concerns\RestrictedToArea;
 use App\Filament\Resources\Pages\Pages\EditPage;
 use App\Filament\Resources\Pages\Pages\ListPages;
 use App\Filament\Resources\Pages\Schemas\PageForm;
@@ -22,6 +24,10 @@ use UnitEnum;
  */
 class PageResource extends Resource
 {
+    use RestrictedToArea;
+
+    protected static string $area = UserRole::CONTENT;
+
     protected static ?string $model = Page::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;

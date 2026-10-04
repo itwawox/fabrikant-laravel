@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Holidays;
 
+use App\Enums\UserRole;
+use App\Filament\Concerns\RestrictedToArea;
 use App\Filament\Resources\Holidays\Pages\ManageHolidays;
 use App\Models\Holiday;
 use BackedEnum;
@@ -17,6 +19,10 @@ use UnitEnum;
 
 class HolidayResource extends Resource
 {
+    use RestrictedToArea;
+
+    protected static string $area = UserRole::PROMOS;
+
     protected static ?string $model = Holiday::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDays;

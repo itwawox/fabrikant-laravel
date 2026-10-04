@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\BookingStatus;
+use App\Models\Concerns\LogsChanges;
 use Database\Factories\BookingFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,6 +15,8 @@ class Booking extends Model
 {
     /** @use HasFactory<BookingFactory> */
     use HasFactory;
+
+    use LogsChanges;
 
     use Notifiable;
 

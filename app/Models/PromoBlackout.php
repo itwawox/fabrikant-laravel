@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsChanges;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable(['date', 'reason'])]
 class PromoBlackout extends Model
 {
+    use LogsChanges;
+
     protected function casts(): array
     {
         return [

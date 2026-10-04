@@ -76,6 +76,10 @@ class SectionEditor
             }
         });
 
+        // Рамки пересохраняются целиком — в журнал одной записью, а не сотней
+        activity()->performedOn($menu)->event('sections')->withProperties(['sections' => count($sections)])
+            ->log('Разделы меню сохранены');
+
         return ['saved' => count($sections)];
     }
 

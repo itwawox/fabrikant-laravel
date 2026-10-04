@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\GalleryRubrics;
 
+use App\Enums\UserRole;
+use App\Filament\Concerns\RestrictedToArea;
 use App\Filament\Resources\GalleryRubrics\Pages\ManageGalleryRubrics;
 use App\Models\GalleryRubric;
 use App\Support\MenuSlug;
@@ -20,6 +22,10 @@ use UnitEnum;
 
 class GalleryRubricResource extends Resource
 {
+    use RestrictedToArea;
+
+    protected static string $area = UserRole::GALLERY;
+
     protected static ?string $model = GalleryRubric::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedFolder;

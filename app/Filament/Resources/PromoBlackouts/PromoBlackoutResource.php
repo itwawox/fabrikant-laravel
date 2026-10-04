@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\PromoBlackouts;
 
+use App\Enums\UserRole;
+use App\Filament\Concerns\RestrictedToArea;
 use App\Filament\Resources\PromoBlackouts\Pages\ManagePromoBlackouts;
 use App\Models\PromoBlackout;
 use BackedEnum;
@@ -20,6 +22,10 @@ use UnitEnum;
 
 class PromoBlackoutResource extends Resource
 {
+    use RestrictedToArea;
+
+    protected static string $area = UserRole::PROMOS;
+
     protected static ?string $model = PromoBlackout::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedNoSymbol;

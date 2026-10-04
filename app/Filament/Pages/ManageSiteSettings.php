@@ -2,6 +2,8 @@
 
 namespace App\Filament\Pages;
 
+use App\Enums\UserRole;
+use App\Filament\Concerns\RestrictedToArea;
 use App\Settings\SiteSettings;
 use App\Support\PageTexts;
 use BackedEnum;
@@ -21,6 +23,10 @@ use UnitEnum;
  */
 class ManageSiteSettings extends SettingsPage
 {
+    use RestrictedToArea;
+
+    protected static string $area = UserRole::SETTINGS;
+
     protected static string $settings = SiteSettings::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;

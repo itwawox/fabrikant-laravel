@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Promos;
 
+use App\Enums\UserRole;
+use App\Filament\Concerns\RestrictedToArea;
 use App\Filament\Resources\Promos\Pages\CreatePromo;
 use App\Filament\Resources\Promos\Pages\EditPromo;
 use App\Filament\Resources\Promos\Pages\ListPromos;
@@ -17,6 +19,10 @@ use UnitEnum;
 
 class PromoResource extends Resource
 {
+    use RestrictedToArea;
+
+    protected static string $area = UserRole::PROMOS;
+
     protected static ?string $model = Promo::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTicket;

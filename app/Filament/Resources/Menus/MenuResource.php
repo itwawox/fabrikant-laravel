@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Menus;
 
+use App\Enums\UserRole;
+use App\Filament\Concerns\RestrictedToArea;
 use App\Filament\Resources\Menus\Pages\CreateMenu;
 use App\Filament\Resources\Menus\Pages\EditMenu;
 use App\Filament\Resources\Menus\Pages\ListMenus;
@@ -17,6 +19,10 @@ use Filament\Tables\Table;
 
 class MenuResource extends Resource
 {
+    use RestrictedToArea;
+
+    protected static string $area = UserRole::MENU;
+
     protected static ?string $model = Menu::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBookOpen;

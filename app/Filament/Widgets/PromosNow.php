@@ -2,6 +2,8 @@
 
 namespace App\Filament\Widgets;
 
+use App\Enums\UserRole;
+use App\Models\User;
 use App\Services\PromoSchedule;
 use Filament\Widgets\Widget;
 
@@ -16,6 +18,13 @@ class PromosNow extends Widget
 
     // Считается мгновенно — грузить отдельным запросом незачем
     protected static bool $isLazy = false;
+
+    public static function canView(): bool
+    {
+        $user = auth()->user();
+
+        return $user instanceof User && $user->canManage(UserRole::PROMOS);
+    }
 
     /** @return list<array{id: string, title: string, short: ?string, kind: string, label: string}> */
     public function items(): array
