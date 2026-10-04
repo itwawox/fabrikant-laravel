@@ -560,12 +560,11 @@
   70%, 100% { box-shadow: 0 0 0 9px rgb(216 24 124 / 0); }
 }
 
-/* В меню: на тёмном столе, под шапкой, по ширине содержимого меню */
+/* В меню: на тёмном столе, в одной строке с переключателем вида (.menu-tools в book.css задаёт отступы и линию) */
 .promo-now--table {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 10px 20px;
-  border-bottom: 1px solid rgb(255 255 255 / .16);
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
 }
 .promo-now--table .promo-now__list {
   justify-content: flex-start;
@@ -591,9 +590,6 @@
   color: inherit;
 }
 @media (max-width: 767px) {
-  .promo-now--table {
-    padding: 8px 12px;
-  }
   .promo-now--table .promo-now__link {
     column-gap: 8px;
     padding: 6px 10px 5px;

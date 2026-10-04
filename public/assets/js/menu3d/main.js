@@ -10,7 +10,8 @@ const view = document.querySelector('.menu-view');
 const bookEl = view.querySelector('.book');
 const stage = view.querySelector('.book__stage');
 const read = view.querySelector('.menu-read');
-const switcher = view.querySelector('.menu-view__switch');
+// Переключатель стоит в строке над меню, рядом с плашкой акций
+const switcher = document.querySelector('.menu-view__switch');
 const modes = Array.from(switcher.querySelectorAll('.menu-view__mode'));
 const tocList = view.querySelector('.menu-toc__list');
 const tocLinks = Array.from(view.querySelectorAll('.menu-toc__link'));
@@ -300,9 +301,15 @@ Promise.all([whenActivated(), scriptsReady]).then(() => {
             view.scrollIntoView({ behavior: 'instant' });
         }
     });
+    // «Читать» в панели газеты — то же, что кнопка переключателя, который уехал наверх
+    bookEl.querySelector('.book__read')?.addEventListener('click', () => {
+        modes.find((button) => button.dataset.mode === 'flat')?.click();
+    });
     // Вид для чтения уже на месте: к разделу или странице из адреса браузер прокрутил сам
     if (able && memory() === 'book') {
         openBook(page);
+        // Газета рассчитана на экран под шапкой сайта: заголовок и плашка акций уходят наверх
+        view.scrollIntoView({ behavior: 'instant' });
     } else {
         show('flat');
     }

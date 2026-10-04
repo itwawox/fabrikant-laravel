@@ -37,7 +37,15 @@
                     <h1 class="menu-head__title">Меню</h1>
                     <p class="menu-head__season">{{ $menu->season }}</p>
                 </div>
+                <!-- Акции сегодня — в шапке между заголовком и кнопками, отдельной строки под меню нет
+                     (пересчитывает assets/js/promos-now.js) -->
+                <x-promo-bar class="promo-now--table" />
                 <div class="menu-head__actions">
+                    <!-- Вид меню: две вкладки, как рубрики газеты. Показывает скрипт там, где газета может работать -->
+                    <div class="menu-view__switch" role="group" aria-label="Вид меню" hidden>
+                        <button type="button" class="menu-view__mode" data-mode="flat" aria-pressed="true"><svg class="menu-view__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 3h9l3 3v15H6zM9 9h6M9 13h6M9 17h4"/></svg>Читать</button>
+                        <button type="button" class="menu-view__mode" data-mode="book" aria-pressed="false"><svg class="menu-view__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 6c-2-1.5-5-2-8-1.5v14c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-14c-3-.5-6 0-8 1.5zM12 6v14"/></svg>Листать газету</button>
+                    </div>
                     <!-- На телефоне от кнопок остаются значок и короткое слово («PDF», «Бронь»), чтобы шапка
                          уместилась в одну строку с заголовком и меню начиналось в первом экране -->
 @if ($pdf)
@@ -54,8 +62,6 @@
             </div>
         </header>
 
-        <!-- Акции сегодня: «Сейчас, до 15:00 — Счастливые часы». Пересчитывает assets/js/promos-now.js -->
-        <x-promo-bar class="promo-now--table" />
 
 
         <!-- Два вида одного меню. Скрипт menu3d/main.js выбирает один и ставит data-mode="book" или "flat";
@@ -64,14 +70,10 @@
             <!-- Гость раньше выбрал газету: пока она грузится, меню для чтения не показываем, чтобы оно не мелькнуло
                  (стили по data-want в book.css). Остальным оно видно сразу — это и есть первый экран -->
             <script>try { if (localStorage.getItem('fabrikant.menu.mode') === 'book' && !matchMedia('(max-width: 767px)').matches) document.currentScript.parentNode.dataset.want = 'book'; } catch (e) {}</script>
-            <!-- Полоса над меню: переключатель вида, подсказка про лупу (в виде для чтения) и содержание
-                 с миниатюрами (в газете; в виде для чтения его заменяют разделы слева). Переключатель
-                 показывает скрипт, и только там, где газета может работать -->
+            <!-- Полоса над меню: подсказка про лупу (в виде для чтения) и содержание с миниатюрами
+                 (в газете; в виде для чтения его заменяют разделы слева). Переключатель вида — строкой выше,
+                 его показывает скрипт, и только там, где газета может работать -->
             <div class="menu-view__bar">
-                <div class="menu-view__switch" role="group" aria-label="Вид меню" hidden>
-                    <button type="button" class="menu-view__mode" data-mode="flat" aria-pressed="true">Читать</button>
-                    <button type="button" class="menu-view__mode" data-mode="book" aria-pressed="false">Листать газету</button>
-                </div>
                 <p class="menu-view__hint">Наведите на страницу — лупа покажет строки крупнее. Нажмите — страница откроется для чтения.</p>
                 <nav class="menu-toc" aria-label="Содержание меню">
                     <!-- Стрелки показывает скрипт, а стили — только на ПК: на телефоне полосу листают пальцем -->
@@ -113,6 +115,8 @@
                     </div>
                 </div>
                 <div class="book__bar">
+                    <!-- Переключатель вида уехал наверх вместе с заголовком: вернуться к чтению — отсюда -->
+                    <button type="button" class="book__read"><svg class="menu-view__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 3h9l3 3v15H6zM9 9h6M9 13h6M9 17h4"/></svg>Читать</button>
                     <p class="book__hint">Листайте, потянув страницу за край или нажав на её внешнюю треть. Двойное нажатие — увеличить.</p>
                     <!-- Кнопки выключены, пока газета загружается; включает их menu3d/ui.js -->
                     <div class="book__controls" role="group" aria-label="Управление газетой">
@@ -129,8 +133,12 @@
                         <button type="button" class="book__btn book__btn--full" aria-label="На весь экран" title="На весь экран" disabled>
                             <svg class="book__glyph book__glyph--enter" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>
                             <svg class="book__glyph book__glyph--exit" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5"/></svg>
+                            <span class="book__label book__glyph--enter" aria-hidden="true">На весь экран</span>
+                            <span class="book__label book__glyph--exit" aria-hidden="true">Свернуть</span>
                         </button>
                     </div>
+                    <!-- Шапка с кнопкой брони уехала наверх — бронь под рукой здесь, справа -->
+                    <a class="book__call" href="{{ $phone[0] }}" data-goal="menu_call" aria-label="Забронировать стол по телефону {{ $phone[1] }}">{!! Html::icon('phone') !!}<span>Забронировать стол</span></a>
                     <!-- Совет рядом с кнопкой «На весь экран»; пропадает, когда газету развернули (menu3d/ui.js).
                          Указующая рука — старинный типографский знак, на узком экране кнопка не слева, и знак скрыт -->
                     <p class="book__tip"><span class="book__tip-mark" aria-hidden="true">&#9756;</span> Разверните меню на весь экран для более удобного просмотра</p>
@@ -158,6 +166,13 @@
                         </li>
 @endforeach
                     </ol>
+                    <!-- Шапка с бронью и PDF уехала наверх — те же кнопки внизу оглавления (ПК; показывает menu.js) -->
+                    <div class="menu-nav__cta">
+                        <a class="menu-nav__call" href="{{ $phone[0] }}" data-goal="menu_call"><span class="menu-nav__call-text">Забронировать стол</span> <span class="menu-nav__note">{{ $phone[1] }}</span></a>
+@if ($pdf)
+                        <a class="menu-nav__pdf" href="{{ $pdf }}" download="{{ $pdfFile }}" data-goal="menu_pdf">Скачать PDF{!! $pdfSize ? ' <span class="menu-nav__note">'.e($pdfSize).'</span>' : '' !!}</a>
+@endif
+                    </div>
                 </nav>
 
                 <div class="menu-read__pages">

@@ -227,6 +227,18 @@
     read.addEventListener('pointerdown', function () { lens.hidden = true; });
     window.addEventListener('scroll', function () { lens.hidden = true; }, { passive: true });
 
+    // --- Бронь и PDF под рукой: на ПК, когда шапка с ними ушла с экрана, они появляются внизу оглавления ---
+
+    var section = document.querySelector('.section_menu-pages');
+    var head = document.querySelector('.menu-head');
+    if (section && head && window.IntersectionObserver) {
+        new IntersectionObserver(function (entries) {
+            var e = entries[0];
+            // «Ушла» — значит прокручена вверх, под шапку сайта; ниже экрана она быть не может
+            section.classList.toggle('is-head-away', !e.isIntersecting && e.boundingClientRect.top < 0);
+        }, { rootMargin: '-70px 0px 0px 0px' }).observe(head);
+    }
+
     // --- Кнопка брони на телефоне ---
 
     var dock = document.querySelector('.menu-dock');
