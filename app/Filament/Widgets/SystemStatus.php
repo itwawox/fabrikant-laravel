@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Enums\UserRole;
 use App\Models\User;
+use App\Support\QueueHealth;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Carbon;
@@ -37,9 +38,11 @@ class SystemStatus extends StatsOverviewWidget
             + collect(Storage::disk('local')->allFiles())->sum(fn (string $f): int => Storage::disk('local')->size($f));
 
         return [
-            Stat::make('Очередь задач', $pending ? "ждут: {$pending}" : 'пусто')
-                ->description($failed ? "ошибок за неделю: {$failed} — см. журнал storage/logs" : 'ошибок за неделю нет')
-                ->color($failed ? 'danger' : ($pending > 20 ? 'warning' : 'success')),
+            QueueHealth::stalled()
+                ? Stat::make('Очередь задач', 'не запущена')->description("ждут: {$pending}. Обработка меню и фото стоит")->color('danger')
+                : Stat::make('Очередь задач', $pending ? "ждут: {$pending}" : 'пусто')
+                    ->description($failed ? "ошибок за неделю: {$failed} — см. журнал storage/logs" : 'ошибок за неделю нет')
+                    ->color($failed ? 'danger' : ($pending > 20 ? 'warning' : 'success')),
             Stat::make('Последний бэкап', $backupAt ? $backupAt->translatedFormat('j F, H:i') : 'ещё не было')
                 ->description($backupAt ? $backupAt->diffForHumans() : 'делается каждую ночь в 04:10')
                 ->color(! $backupAt || $backupAt->lt(now()->subDays(2)) ? 'danger' : 'success'),

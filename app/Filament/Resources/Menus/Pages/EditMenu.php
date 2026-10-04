@@ -92,7 +92,7 @@ class EditMenu extends EditRecord
             Action::make('retry')
                 ->label('Повторить обработку')
                 ->icon('heroicon-o-arrow-path')
-                ->visible(fn (): bool => $this->record->error !== null)
+                ->visible(fn (): bool => $this->record->error !== null || MenuPipeline::stuck($this->record))
                 ->action(function () {
                     app(MenuPipeline::class)->start($this->record);
                     $this->record->refresh();
