@@ -30,6 +30,8 @@ class PromoBlackoutResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Дни без акций';
 
+    protected static ?string $navigationLabel = 'Дни без акций';
+
     protected static ?int $navigationSort = 3;
 
     public static function form(Schema $schema): Schema

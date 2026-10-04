@@ -29,6 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->passwordReset()
             ->brandName('ФабрикантЪ')
+            ->navigationGroups(['Акции', 'Галерея', 'Сайт'])
             ->colors([
                 'primary' => Color::hex('#c3850d'),
             ])
