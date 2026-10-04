@@ -77,6 +77,15 @@ class MenuPipeline
         ]);
     }
 
+    /**
+     * Обработка встала: меню «обрабатывается», но давно не двигалось (страница рисуется секунды).
+     * Обычно это упавший обработчик очереди — тогда помогает «Повторить обработку».
+     */
+    public static function stuck(Menu $menu): bool
+    {
+        return $menu->status === MenuStatus::Processing && $menu->updated_at?->lt(now()->subMinutes(5));
+    }
+
     /** «Страницы: 3 из 8» */
     public static function progressLabel(Menu $menu): ?string
     {

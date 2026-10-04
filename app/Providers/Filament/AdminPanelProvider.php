@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Support\QueueHealth;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -10,6 +11,7 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -30,6 +32,10 @@ class AdminPanelProvider extends PanelProvider
             ->passwordReset()
             ->brandName('ФабрикантЪ')
             ->navigationGroups(['Акции', 'Галерея', 'Сайт'])
+            // Очередь задач стоит — предупреждение вверху любой страницы, а не вечная «Обработка…»
+            ->renderHook(PanelsRenderHook::PAGE_START, fn (): string => QueueHealth::stalled()
+                ? view('filament.queue-stalled')->render()
+                : '')
             ->colors([
                 'primary' => Color::hex('#c3850d'),
             ])
