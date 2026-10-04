@@ -5,9 +5,11 @@ use App\Filament\Resources\Menus\Pages\CreateMenu;
 use App\Filament\Resources\Menus\Pages\EditMenu;
 use App\Filament\Resources\Menus\Pages\ListMenus;
 use App\Filament\Resources\Menus\Pages\MenuSections;
+use App\Filament\Resources\Menus\Schemas\MenuForm;
 use App\Models\Menu;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
@@ -60,16 +62,41 @@ it('uploads a PDF and gets a ready menu without the terminal', function () {
     $this->get('/menu')->assertOk()->assertSee($menu->storage_dir.'/1-1600.jpg', false);
 });
 
-it('rejects files that are not PDF', function () {
+it('rejects files that are not PDF, whatever their name', function (string $name) {
     Storage::fake('local');
 
+    // Картинка, переименованная в .pdf, — всё равно не PDF: проверяется содержимое
+    $image = UploadedFile::fake()->image('x.jpg');
     Livewire::test(CreateMenu::class)
-        ->fillForm(['season' => 'Зима 2026', 'upload' => UploadedFile::fake()->image('menu.jpg')])
+        ->fillForm(['season' => 'Зима 2026', 'upload' => UploadedFile::fake()->createWithContent($name, (string) file_get_contents($image->getRealPath()))])
         ->call('create')
         ->assertHasFormErrors(['upload']);
 
     expect(Menu::count())->toBe(0);
+})->with(['menu.jpg', 'menu.pdf']);
+
+it('accepts a PDF with any file name and fills the season', function () {
+    if (! Process::run(['gs', '--version'])->successful()) {
+        $this->markTestSkipped('Нет Ghostscript');
+    }
+    Storage::fake('local');
+    Storage::fake('public');
+    config(['menu.page.width' => 300, 'menu.page.low_width' => 200, 'menu.thumb.width' => 100, 'menu.zoom.width' => 400, 'menu.web_pdf.width' => 300]);
+    $season = MenuForm::currentSeason();
+
+    Livewire::test(CreateMenu::class)
+        ->assertFormSet(['season' => $season])
+        ->assertSee('Загрузить и обработать')
+        ->fillForm(['upload' => UploadedFile::fake()->createWithContent('Меню осень ФИНАЛ (2).pdf.download', (string) file_get_contents(base_path('tests/fixtures/menu/two-pages.pdf')))])
+        ->call('create')
+        ->assertHasNoFormErrors();
+
+    expect(Menu::sole()->status)->toBe(MenuStatus::Ready)->and(Menu::sole()->season)->toBe($season);
 });
+
+it('names the season by the month', function (string $date, string $season) {
+    expect(MenuForm::currentSeason(Carbon::parse($date)))->toBe($season);
+})->with([['2026-01-15', 'Зима 2026'], ['2026-03-01', 'Весна 2026'], ['2026-07-01', 'Лето 2026'], ['2026-10-04', 'Осень 2026'], ['2026-12-20', 'Зима 2027']]);
 
 it('shows the error and a retry button for a failed menu', function () {
     $menu = Menu::factory()->create(['status' => MenuStatus::Draft, 'error' => 'PDF защищён паролем.']);

@@ -34,4 +34,5 @@ php artisan test
 
 - `docs/decisions.md` — принятые решения и ответы заказчика
 - `docs/hosting.md` — что есть на хостинге и какие лимиты
+- `docs/admin-guide.md` — инструкция по админке для ресторана
 - `docs/visual/` — сравнения картинок
