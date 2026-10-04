@@ -3,6 +3,13 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "test": "node --test tests/js/"
+        "test": "node --test tests/js/",
+        "visual": "node tests/visual/compare.mjs",
+        "visual:check": "node tests/visual/check.mjs"
+    },
+    "devDependencies": {
+        "pixelmatch": "^7.2.0",
+        "playwright-core": "^1.63.0",
+        "pngjs": "^7.0.0"
     }
 }
