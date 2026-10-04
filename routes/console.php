@@ -15,3 +15,6 @@ Schedule::command('menu:publish-scheduled')->everyMinute()->withoutOverlapping()
 // На хостинге нет supervisor: очередь (обработка PDF меню) запускается планировщиком каждую минуту
 // и сама завершается, когда задач нет или прошло 50 секунд
 Schedule::command('queue:work --stop-when-empty --max-time=50')->everyMinute()->withoutOverlapping();
+
+// Страницы сайта в кэше, а акции с периодом заканчиваются в полночь — после полуночи кэш собирается заново
+Schedule::command('responsecache:clear')->dailyAt('00:01')->timezone('Europe/Simferopol');

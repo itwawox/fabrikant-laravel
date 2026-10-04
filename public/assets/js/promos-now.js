@@ -32,6 +32,10 @@
                 if (w.days.indexOf(iso) < 0) {
                     return;
                 }
+                // Период действия акции: даты вида 2026-10-05 сравниваются как строки
+                if ((w.since && ymd < w.since) || (w.until && ymd > w.until)) {
+                    return;
+                }
                 if (w.not_holidays && (rules.holidays.indexOf(md) >= 0 || rules.no_dates.indexOf(ymd) >= 0)) {
                     return;
                 }
