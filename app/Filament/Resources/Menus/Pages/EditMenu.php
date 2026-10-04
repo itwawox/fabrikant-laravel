@@ -56,6 +56,13 @@ class EditMenu extends EditRecord
                 ->url(fn (): string => URL::temporarySignedRoute('menu.preview', now()->addWeek(), ['menu' => $this->record]))
                 ->openUrlInNewTab(),
 
+            Action::make('sections')
+                ->label(fn (): string => 'Разделы ('.$this->record->sections()->count().')')
+                ->icon('heroicon-o-squares-2x2')
+                ->color('gray')
+                ->visible($is(MenuStatus::Ready, MenuStatus::Archived, MenuStatus::Published))
+                ->url(fn (): string => MenuResource::getUrl('sections', ['record' => $this->record])),
+
             Action::make('publish')
                 ->label(fn (): string => $this->record->status === MenuStatus::Archived ? 'Опубликовать снова' : 'Опубликовать сейчас')
                 ->icon('heroicon-o-rocket-launch')
