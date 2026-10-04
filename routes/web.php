@@ -1,7 +1,30 @@
 <?php
 
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [PageController::class, 'home'])->name('home');
+Route::get('/about', [PageController::class, 'about'])->name('about');
+Route::get('/menu', [MenuController::class, 'show'])->name('menu');
+Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery');
+Route::get('/promos', [PageController::class, 'promos'])->name('promos');
+Route::get('/contacts', [PageController::class, 'contacts'])->name('contacts');
+Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
+
+// Адреса старого сайта. Они напечатаны в QR-кодах и разосланы в соцсетях, поэтому ведут на новые навсегда (301).
+// Якорь (#supy, #happyhours, #foto-fasad) браузер сохраняет сам — сервер его не видит.
+foreach ([
+    'index.php' => '/',
+    'about.php' => '/about',
+    'menu.php' => '/menu',
+    'gallery.php' => '/gallery',
+    'calendar.php' => '/promos',
+    'contacts.php' => '/contacts',
+] as $old => $new) {
+    Route::permanentRedirect($old, $new);
+}
+
+// Старые ссылки на PDF меню (/uploads/menu_…-web.pdf) ведут на текущее меню: файл прошлого сезона гостю не нужен
+Route::get('/uploads/{file}', [MenuController::class, 'legacyPdf'])->where('file', '[A-Za-z0-9_.-]+\.pdf');

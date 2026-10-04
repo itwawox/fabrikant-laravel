@@ -6,6 +6,7 @@ use Database\Factories\PromoFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 #[Fillable([
     'slug', 'title', 'discount', 'subject', 'short', 'photo_path', 'photo_webp_path', 'alt', 'rows', 'terms',
@@ -34,5 +35,13 @@ class Promo extends Model
     public function hasSchedule(): bool
     {
         return ! empty($this->days);
+    }
+
+    // Адрес фото карточки от корня сайта: webp — для современных браузеров, jpg — запасной
+    public function photoUrl(string $format = 'jpg'): ?string
+    {
+        $path = $format === 'webp' ? $this->photo_webp_path : $this->photo_path;
+
+        return $path ? Storage::disk('public')->url($path) : null;
     }
 }

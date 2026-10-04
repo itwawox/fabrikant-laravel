@@ -35,3 +35,6 @@ Thumbs.db
 # Конфиги агентов, которые ставит Boost (в git — только Claude Code и общие skills)
 /.grok
 /.claude/settings.local.json
+
+# Видео главной (31 МБ) хранится отдельно, как в старом репозитории
+/public/assets/video/*
