@@ -1,0 +1,20 @@
+/* Форма брони и политика конфиденциальности — газетный лист, как «Контакты» (gazette.css) */
+.booking__lede { margin: 1.5rem 0; color: var(--gz-grey); }
+.booking__form { display: grid; gap: 1rem; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.booking__field { display: grid; gap: .35rem; }
+.booking__field--wide { grid-column: 1 / -1; }
+.booking__field label { font-weight: 700; text-transform: uppercase; font-size: .95rem; letter-spacing: .05em; }
+.booking__field input, .booking__field textarea, .booking__field select {
+  font: inherit; color: var(--gz-ink); background: var(--gz-paper);
+  border: 2px solid var(--gz-ink); padding: .6rem .7rem; width: 100%; border-radius: 0;
+}
+.booking__field input:focus-visible, .booking__field textarea:focus-visible, .booking__field select:focus-visible { outline: 3px solid var(--gz-spot); outline-offset: 1px; }
+.booking__error { color: #b3261e; font-size: .85rem; margin: 0; }
+.booking__consent { grid-column: 1 / -1; display: flex; gap: .6rem; align-items: flex-start; font-size: 1rem; line-height: 1.5; }
+.booking__consent input { width: 1.2rem; height: 1.2rem; margin-top: .15rem; accent-color: var(--gz-ink); flex: none; }
+.booking__trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.booking__submit { grid-column: 1 / -1; justify-self: start; cursor: pointer; font: inherit; }
+.booking__done { border: 3px double var(--gz-ink); padding: 1.25rem; margin: 0 0 1.5rem; }
+.booking__done strong { display: block; font-family: var(--gz-slab); font-size: 1.3rem; margin-bottom: .35rem; }
+.privacy__text p { margin: 0 0 1rem; line-height: 1.6; }
+@media (max-width: 767px) { .booking__form { grid-template-columns: 1fr; } }

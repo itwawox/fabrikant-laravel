@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Settings\SiteSettings;
+use App\Support\PageTexts;
 use BackedEnum;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
@@ -78,6 +79,29 @@ class ManageSiteSettings extends SettingsPage
                     ->required(fn (Get $get): bool => (bool) $get('metrika_enabled'))
                     ->helperText('Сменить номер — новая статистика начнётся с нуля, цели нужно завести заново.'),
             ]),
+            Section::make('Онлайн-бронь')
+                ->description('Форма на странице /booking: заявка приходит сюда в «Брони», на почту и в Telegram ресторана (бот настраивает разработчик).')
+                ->columns(2)
+                ->schema([
+                    Toggle::make('booking_enabled')
+                        ->label('Принимать заявки на сайте')
+                        ->disabled(fn (): bool => ! PageTexts::for('privacy')->get('text'))
+                        ->helperText(fn (): string => PageTexts::for('privacy')->get('text')
+                            ? 'На странице «Контакты» появится кнопка «Заявка онлайн».'
+                            : 'Сначала впишите политику обработки персональных данных: «Страницы и тексты» → «Политика…».')
+                        ->columnSpanFull(),
+                    TextInput::make('booking_email')
+                        ->label('Почта для заявок')
+                        ->email()
+                        ->helperText('Пусто — на основную почту.'),
+                    TextInput::make('booking_retention_days')
+                        ->label('Хранить заявки, дней после визита')
+                        ->numeric()
+                        ->minValue(7)
+                        ->maxValue(365)
+                        ->required()
+                        ->helperText('Это персональные данные: хранить дольше нужного нельзя (152-ФЗ).'),
+                ]),
             Section::make('Для поисковиков')->schema([
                 TagsInput::make('cuisines')
                     ->label('Кухни')
@@ -98,6 +122,9 @@ class ManageSiteSettings extends SettingsPage
         $data['lat'] = (float) $data['lat'];
         $data['lng'] = (float) $data['lng'];
         $data['cuisines'] = array_values($data['cuisines'] ?? []);
+        $data['booking_retention_days'] = (int) $data['booking_retention_days'];
+        // Отключённое поле в форму не приходит — оставляем как было
+        $data['booking_enabled'] = (bool) ($data['booking_enabled'] ?? false) && PageTexts::for('privacy')->get('text');
 
         return $data;
     }

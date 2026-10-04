@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SitemapController;
@@ -16,6 +17,11 @@ Route::middleware(CacheResponse::class)->group(function () {
     Route::get('/contacts', [PageController::class, 'contacts'])->name('contacts');
     Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 });
+
+// Бронь онлайн и политика обработки персональных данных — без кэша страниц (форма, сообщения об ошибках)
+Route::get('/booking', [BookingController::class, 'show'])->name('booking');
+Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
+Route::get('/privacy', [BookingController::class, 'privacy'])->name('privacy');
 
 // Предпросмотр меню до публикации: ссылку с подписью выдаёт админка
 Route::get('/menu/preview/{menu}', [MenuController::class, 'preview'])->middleware('signed')->name('menu.preview');

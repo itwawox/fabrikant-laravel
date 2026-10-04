@@ -52,6 +52,14 @@ class SiteSettings extends Settings
     /** @var list<string> кухни для карточки ресторана в поиске (schema.org) */
     public array $cuisines;
 
+    // Онлайн-заявки на бронь: включены ли, куда слать письмо (пусто — на основную почту),
+    // сколько дней хранить заявки после даты визита
+    public bool $booking_enabled;
+
+    public ?string $booking_email;
+
+    public int $booking_retention_days;
+
     public static function group(): string
     {
         return 'site';
