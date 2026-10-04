@@ -114,6 +114,9 @@ class ActivityResource extends Resource
     // «Название: Обед → Бизнес-ланч; Скидка: 20% → 25%» — коротко, чтобы видно было в одну-две строки
     public static function changes(Activity $activity): string
     {
+        if (in_array($activity->event, ['created', 'deleted'], true)) {
+            return '—';
+        }
         if ($activity->event !== 'updated') {
             return $activity->description;
         }
