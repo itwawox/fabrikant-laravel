@@ -24,16 +24,28 @@ class MenuMarkup
         return true;
     }
 
-    /** Копия подписей страниц и разделов с рамками из $from в $to (разделы $to заменяются). */
-    public function copy(Menu $from, Menu $to): void
+    /** Последнее другое меню с разметкой — для кнопки «Скопировать разметку из прошлого меню». */
+    public function previousWithMarkup(Menu $menu): ?Menu
     {
-        DB::transaction(function () use ($from, $to) {
-            foreach ($from->pages as $page) {
-                $to->pages()->where('number', $page->number)->update(['title' => $page->title]);
+        return Menu::query()->whereKeyNot($menu->getKey())->whereHas('sections')
+            ->orderByRaw('published_at is null')->latest('published_at')->latest('id')->first();
+    }
+
+    /**
+     * Копия разделов с рамками (и подписей страниц, если $titles) из $from в $to. Разделы $to заменяются;
+     * разделы на страницах, которых в $to нет, не копируются.
+     */
+    public function copy(Menu $from, Menu $to, bool $titles = true): void
+    {
+        DB::transaction(function () use ($from, $to, $titles) {
+            if ($titles) {
+                foreach ($from->pages as $page) {
+                    $to->pages()->where('number', $page->number)->update(['title' => $page->title]);
+                }
             }
 
             $to->sections()->delete();
-            foreach ($from->sections()->with('boxes')->get() as $section) {
+            foreach ($from->sections()->with('boxes')->where('page_number', '<=', $to->pages_count)->get() as $section) {
                 $copy = $to->sections()->create($section->only(['page_number', 'title', 'slug', 'slug_locked', 'position']));
                 foreach ($section->boxes as $box) {
                     $copy->boxes()->create($box->only(['x', 'y', 'w', 'h', 'position']));

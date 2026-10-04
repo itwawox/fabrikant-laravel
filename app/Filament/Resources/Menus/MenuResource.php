@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Menus;
 use App\Filament\Resources\Menus\Pages\CreateMenu;
 use App\Filament\Resources\Menus\Pages\EditMenu;
 use App\Filament\Resources\Menus\Pages\ListMenus;
+use App\Filament\Resources\Menus\Pages\MenuSections;
 use App\Filament\Resources\Menus\Schemas\MenuForm;
 use App\Filament\Resources\Menus\Tables\MenusTable;
 use App\Models\Menu;
@@ -44,6 +45,7 @@ class MenuResource extends Resource
             'index' => ListMenus::route('/'),
             'create' => CreateMenu::route('/create'),
             'edit' => EditMenu::route('/{record}/edit'),
+            'sections' => MenuSections::route('/{record}/sections'),
         ];
     }
 }
