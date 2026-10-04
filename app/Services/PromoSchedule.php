@@ -5,8 +5,8 @@ namespace App\Services;
 use App\Models\Holiday;
 use App\Models\Promo;
 use App\Models\PromoBlackout;
+use Carbon\CarbonImmutable;
 use DateTimeImmutable;
-use DateTimeZone;
 
 /**
  * Плашка «Сейчас действует»: какие акции идут в эту минуту по времени Симферополя.
@@ -61,7 +61,8 @@ class PromoSchedule
      */
     public function items(array $rules, ?DateTimeImmutable $now = null): array
     {
-        $now ??= new DateTimeImmutable('now', new DateTimeZone(self::TZ));
+        // Через Carbon, а не new DateTimeImmutable: так время можно подменить в тестах и в симуляторе админки
+        $now ??= CarbonImmutable::now(self::TZ);
         $minutes = (int) $now->format('G') * 60 + (int) $now->format('i');
 
         // Сегодня: идёт сейчас или начнётся позже; затем — ближайший день, когда что-то будет

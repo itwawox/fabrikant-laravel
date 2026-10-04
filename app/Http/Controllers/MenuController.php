@@ -38,6 +38,11 @@ class MenuController extends Controller
         $byPage = array_fill(1, max($count, 1), []);
         foreach ($menu->sections as $section) {
             /** @var MenuSection $section */
+            // Раздел без рамок (только что добавлен в админке) или на странице, которой нет, гостю не показываем —
+            // как и старый сайт: кадр вырезать не из чего
+            if ($section->boxes->isEmpty() || ! isset($byPage[$section->page_number])) {
+                continue;
+            }
             $byPage[$section->page_number][] = [
                 'id' => $section->slug,
                 'title' => $section->title,

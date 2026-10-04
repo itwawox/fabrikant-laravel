@@ -39,3 +39,15 @@ jobs:
 
       - name: Pest
         run: vendor/bin/pest --compact
+
+  # Скрипты сайта (газета, лупа, галерея, плашка акций) — без зависимостей, на чистом Node
+  js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+
+      - run: npm test
