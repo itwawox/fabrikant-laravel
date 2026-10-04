@@ -2,6 +2,7 @@
 @use('App\Support\MenuView')
 @php
     $phone = [$site->tel(), $site->phone()];
+    $texts = \App\Support\PageTexts::for('menu');
     // Карточка ресторана для поисковиков: ссылка на меню, адрес, телефон, часы (как на странице «Контакты»)
     $jsonLd = json_encode($site->restaurantSchema() + [
         'hasMenu' => [
@@ -14,9 +15,9 @@
 @endphp
 {{-- Меню — опубликованное в админке (MenuController). Своя шапка ниже, фото не нужно — меню сразу в первом экране --}}
 <x-layouts.site
-    title="Меню | ФабрикантЪ - Ресторан с собственной пивоварней | Симферополь"
-    :description="'Меню ресторана-пивоварни ФабрикантЪ в Симферополе, '.mb_strtolower($menu->season).': пиво собственного производства, закуски, горячее и гриль, десерты, коктейли и вино. Листайте онлайн или скачайте PDF.'"
-    :image="$count ? $urls(1)['jpg'] : null"
+    :title="$texts->title()"
+    :description="$texts->description(mb_strtolower($menu->season))"
+    :image="$texts->image() ?? ($count ? $urls(1)['jpg'] : null)"
     :hero="false"
     :css="['/assets/css/gazette.css', '/assets/css/book.css']"
     :js="['/assets/js/menu.js', '/assets/js/promos-now.js']"

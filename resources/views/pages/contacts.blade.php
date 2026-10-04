@@ -11,10 +11,13 @@
     ]);
     // Маршрут в Яндекс Картах до ресторана (широта, долгота точки из настроек)
     $route = $site->routeUrl();
+    $texts = \App\Support\PageTexts::for('contacts');
 @endphp
 {{-- Главное фото стоит прямо в разметке ниже, предзагрузка фона шапки не нужна --}}
 <x-layouts.site
-    title="Контакты | ФабрикантЪ - Ресторан с собственной пивоварней | Симферополь"
+    :title="$texts->title()"
+    :description="$texts->description()"
+    :image="$texts->image()"
     :hero="false"
     :css="['/assets/css/gazette.css']"
 >
@@ -34,7 +37,7 @@
                     <li><a href="/">Главная</a></li>
                     <li>Контакты</li>
                 </ol>
-                <h1 class="contact__title">Ждём вас в гости</h1>
+                <h1 class="contact__title">{{ $texts->get('title') }}</h1>
                 <address class="contact__address">{{ $site->city() }}, {{ $site->streetAddressFull() }}</address>
                 <hr class="gz-rule">
 
@@ -52,7 +55,7 @@
                     <a class="gz-plaque contact__action" href="{{ $rows['Телефон'][0] }}">Позвонить</a>
                     <a class="gz-plaque contact__action" href="{!! $route !!}" target="_blank" rel="noopener">Проложить маршрут</a>
                 </div>
-                <p class="contact__note">Вопрос управляющему, отзыв или пожелание — напишите нам на почту.</p>
+                <p class="contact__note">{{ $texts->get('note') }}</p>
             </div>
 
             <h2 class="contact__map-title">Как нас найти</h2>

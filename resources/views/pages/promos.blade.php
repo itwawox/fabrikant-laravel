@@ -1,7 +1,10 @@
 @use('App\Support\Html')
 {{-- Акции — из базы (админка, этап 5). Общие для всех акций условия выводятся один раз внизу страницы --}}
+@php($texts = \App\Support\PageTexts::for('promos'))
 <x-layouts.site
-    title="Акции и спецпредложения - Ресторан с собственной пивоварней | Симферополь"
+    :title="$texts->title()"
+    :description="$texts->description()"
+    :image="$texts->image()"
     heading="Акции в ресторане ФабрикантЪ"
     crumb="Акции"
     hero="stage"
