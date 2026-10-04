@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\GalleryPhoto;
 use App\Models\Promo;
+use App\Services\PromoSchedule;
 use App\Support\Press;
 use Illuminate\View\View;
 
@@ -36,7 +37,10 @@ class PageController extends Controller
     public function promos(): View
     {
         return view('pages.promos', [
-            'promos' => Promo::where('is_active', true)->orderBy('position')->get(),
+            // Акция с закончившимся периодом со страницы уходит сама
+            'promos' => Promo::where('is_active', true)
+                ->where(fn ($q) => $q->whereNull('valid_to')->orWhereDate('valid_to', '>=', today(PromoSchedule::TZ)->toDateString()))
+                ->orderBy('position')->get(),
         ]);
     }
 }

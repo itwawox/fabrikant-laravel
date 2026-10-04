@@ -30,7 +30,9 @@ class PromoSchedule
     public function rules(): array
     {
         $promos = Promo::where('is_active', true)->orderBy('position')->get()
-            ->filter(fn (Promo $promo) => $promo->hasSchedule())
+            // Закончившиеся акции скрипту не нужны: он смотрит на неделю вперёд
+            ->filter(fn (Promo $promo) => $promo->hasSchedule()
+                && ($promo->valid_to === null || $promo->valid_to->format('Y-m-d') >= CarbonImmutable::now(self::TZ)->format('Y-m-d')))
             ->map(function (Promo $promo): array {
                 // Ключи — как в старом data/promos.php: пустые не пишем, скрипт проверяет их наличие
                 $when = ['days' => array_map('intval', $promo->days ?? [])];
@@ -40,6 +42,13 @@ class PromoSchedule
                 }
                 if ($promo->not_holidays) {
                     $when['not_holidays'] = true;
+                }
+                // Период действия акции (необязательно): с какого и по какой день включительно
+                if ($promo->valid_from) {
+                    $when['since'] = $promo->valid_from->format('Y-m-d');
+                }
+                if ($promo->valid_to) {
+                    $when['until'] = $promo->valid_to->format('Y-m-d');
                 }
 
                 return ['id' => $promo->slug, 'title' => $promo->title, 'short' => $promo->short, 'when' => $when];
@@ -111,6 +120,11 @@ class PromoSchedule
     private function runsOn(array $when, DateTimeImmutable $day, array $rules): bool
     {
         if (! in_array((int) $day->format('N'), $when['days'], true)) {
+            return false;
+        }
+        // Даты в виде 2026-10-05 сравниваются как строки
+        $ymd = $day->format('Y-m-d');
+        if ((isset($when['since']) && $ymd < $when['since']) || (isset($when['until']) && $ymd > $when['until'])) {
             return false;
         }
 
