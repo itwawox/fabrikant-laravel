@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsChanges;
 use Database\Factories\GalleryRubricFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +14,8 @@ class GalleryRubric extends Model
 {
     /** @use HasFactory<GalleryRubricFactory> */
     use HasFactory;
+
+    use LogsChanges;
 
     protected function casts(): array
     {

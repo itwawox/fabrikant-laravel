@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\Bookings;
 
 use App\Enums\BookingStatus;
+use App\Enums\UserRole;
+use App\Filament\Concerns\RestrictedToArea;
 use App\Filament\Resources\Bookings\Pages\ManageBookings;
 use App\Models\Booking;
 use BackedEnum;
@@ -20,6 +22,10 @@ use Illuminate\Database\Eloquent\Builder;
 /** Заявки на бронь с сайта. Создаёт их только гость, здесь — звонок и отметка, чем закончилось. */
 class BookingResource extends Resource
 {
+    use RestrictedToArea;
+
+    protected static string $area = UserRole::BOOKINGS;
+
     protected static ?string $model = Booking::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPhone;

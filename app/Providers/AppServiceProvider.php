@@ -57,7 +57,10 @@ class AppServiceProvider extends ServiceProvider
         View::composer(['components.layouts.site', 'pages.*', 'errors.*', 'errors::*'], fn ($view) => $view->with('site', app(Site::class)));
 
         // Страниц шесть, правки редкие — проще сбросить кэш целиком, чем вычислять, какие страницы задеты
-        Event::listen(SettingsSaved::class, fn () => ResponseCache::clear());
+        Event::listen(SettingsSaved::class, function (SettingsSaved $event) {
+            ResponseCache::clear();
+            activity()->event('settings')->withProperties($event->settings->toArray())->log('Настройки сайта сохранены');
+        });
         foreach (self::SITE_MODELS as $model) {
             $model::saved(fn () => ResponseCache::clear());
             $model::deleted(fn () => ResponseCache::clear());

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsChanges;
 use Database\Factories\PromoFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,6 +17,8 @@ class Promo extends Model
 {
     /** @use HasFactory<PromoFactory> */
     use HasFactory;
+
+    use LogsChanges;
 
     protected function casts(): array
     {

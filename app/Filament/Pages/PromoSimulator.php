@@ -2,6 +2,8 @@
 
 namespace App\Filament\Pages;
 
+use App\Enums\UserRole;
+use App\Filament\Concerns\RestrictedToArea;
 use App\Services\PromoSchedule;
 use BackedEnum;
 use Carbon\CarbonImmutable;
@@ -16,6 +18,10 @@ use UnitEnum;
  */
 class PromoSimulator extends Page
 {
+    use RestrictedToArea;
+
+    protected static string $area = UserRole::PROMOS;
+
     protected string $view = 'filament.pages.promo-simulator';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClock;

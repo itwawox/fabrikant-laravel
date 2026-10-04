@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\MenuStatus;
+use App\Models\Concerns\LogsChanges;
 use Database\Factories\MenuFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -18,6 +19,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 ])]
 class Menu extends Model
 {
+    use LogsChanges;
+
+    /** @var list<string> служебные поля — в журнал не пишем */
+    protected array $logIgnore = ['progress_step', 'progress_done', 'progress_total', 'processed_at', 'error', 'source_pdf_path', 'web_pdf_path', 'storage_dir', 'name'];
+
     /** @use HasFactory<MenuFactory> */
     use HasFactory;
 

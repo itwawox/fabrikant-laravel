@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsChanges;
 use Database\Factories\MenuPageFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,6 +12,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable(['menu_id', 'number', 'title', 'width', 'height'])]
 class MenuPage extends Model
 {
+    use LogsChanges;
+
+    /** @var list<string> служебные поля — в журнал не пишем */
+    protected array $logIgnore = ['width', 'height'];
+
     /** @use HasFactory<MenuPageFactory> */
     use HasFactory;
 

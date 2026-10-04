@@ -2,6 +2,7 @@
 
 use App\Support\MenuSections;
 use App\Support\MenuSlug;
+use App\Support\Plural;
 
 // Эталон снят со старого сайта: на эти адреса напечатаны QR-коды
 function legacyExpected(): array
@@ -47,3 +48,7 @@ it('skips broken sections and clamps boxes to the sheet', function () {
         ->and($sections[1]['boxes'])->toHaveCount(1)
         ->and($sections[1]['boxes'][0])->toEqualWithDelta([0.9, 0.0, 0.1, 0.5], 1e-9);
 });
+
+it('declines Russian nouns after numbers', function (int $n, string $word) {
+    expect(Plural::ru($n, 'день', 'дня', 'дней'))->toBe($word);
+})->with([[1, 'день'], [2, 'дня'], [5, 'дней'], [11, 'дней'], [14, 'дней'], [21, 'день'], [22, 'дня'], [70, 'дней'], [111, 'дней']]);

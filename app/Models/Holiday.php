@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsChanges;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable(['month_day', 'title'])]
 class Holiday extends Model
 {
+    use LogsChanges;
+
     // Официальные нерабочие праздники РФ (ТК РФ, ст. 112). Переносы выходных каждый год свои — их заводят
     // в «Дни без акций»
     public const OFFICIAL = [

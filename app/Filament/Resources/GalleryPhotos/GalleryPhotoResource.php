@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\GalleryPhotos;
 
+use App\Enums\UserRole;
+use App\Filament\Concerns\RestrictedToArea;
 use App\Filament\Resources\GalleryPhotos\Pages\CreateGalleryPhoto;
 use App\Filament\Resources\GalleryPhotos\Pages\EditGalleryPhoto;
 use App\Filament\Resources\GalleryPhotos\Pages\ListGalleryPhotos;
@@ -17,6 +19,10 @@ use UnitEnum;
 
 class GalleryPhotoResource extends Resource
 {
+    use RestrictedToArea;
+
+    protected static string $area = UserRole::GALLERY;
+
     protected static ?string $model = GalleryPhoto::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPhoto;
