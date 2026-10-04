@@ -4,14 +4,18 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
+use Spatie\ResponseCache\Middlewares\CacheResponse;
 
-Route::get('/', [PageController::class, 'home'])->name('home');
-Route::get('/about', [PageController::class, 'about'])->name('about');
-Route::get('/menu', [MenuController::class, 'show'])->name('menu');
-Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery');
-Route::get('/promos', [PageController::class, 'promos'])->name('promos');
-Route::get('/contacts', [PageController::class, 'contacts'])->name('contacts');
-Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
+// Страницы сайта кэшируются целиком; правки в админке сбрасывают кэш (AppServiceProvider)
+Route::middleware(CacheResponse::class)->group(function () {
+    Route::get('/', [PageController::class, 'home'])->name('home');
+    Route::get('/about', [PageController::class, 'about'])->name('about');
+    Route::get('/menu', [MenuController::class, 'show'])->name('menu');
+    Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery');
+    Route::get('/promos', [PageController::class, 'promos'])->name('promos');
+    Route::get('/contacts', [PageController::class, 'contacts'])->name('contacts');
+    Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
+});
 
 // Адреса старого сайта. Они напечатаны в QR-кодах и разосланы в соцсетях, поэтому ведут на новые навсегда (301).
 // Якорь (#supy, #happyhours, #foto-fasad) браузер сохраняет сам — сервер его не видит.

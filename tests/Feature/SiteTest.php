@@ -146,3 +146,25 @@ it('lists pages in the sitemap', function () {
         ->assertSee('<loc>'.url('/menu').'</loc>', false)
         ->assertSee('<lastmod>', false);
 });
+
+it('caches pages and drops the cache when data changes', function () {
+    $promo = Promo::factory()->create(['title' => 'Счастливые часы']);
+
+    $this->get('/promos')->assertSee('Счастливые часы');
+    // Прямо в базе, мимо модели: кэш об этом не знает и отдаёт прежнюю страницу
+    Promo::whereKey($promo->id)->toBase()->update(['title' => 'Изменено в обход']);
+    $this->get('/promos')->assertSee('Счастливые часы');
+
+    // Правка через модель (как в админке) сбрасывает кэш
+    $promo->fresh()->update(['title' => 'Обеденные часы']);
+    $this->get('/promos')->assertSee('Обеденные часы')->assertDontSee('Счастливые часы');
+});
+
+it('shows a promo without a photo', function () {
+    Promo::factory()->create(['slug' => 'bez-foto', 'photo_path' => null]);
+
+    $this->get('/promos')
+        ->assertOk()
+        ->assertSee('<article class="promo" id="bez-foto">', false)
+        ->assertDontSee('promo__photo', false);
+});

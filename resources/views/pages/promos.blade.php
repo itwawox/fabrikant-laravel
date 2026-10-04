@@ -19,9 +19,11 @@
           <div class="gazette__columns">
 @foreach ($promos as $promo)
             <article class="promo" id="{{ $promo->slug }}">
+@if ($promo->photo_path)
               <figure class="promo__photo">
-                <span class="promo__photo-ink">{!! Html::picture($promo->photoUrl('webp'), $promo->photoUrl('jpg'), 'width="800" height="600" alt="'.e($promo->alt).'" loading="lazy"') !!}</span>
+                <span class="promo__photo-ink">{!! Html::picture($promo->photoUrl('webp') ?? $promo->photoUrl('jpg'), $promo->photoUrl('jpg'), 'width="800" height="600" alt="'.e($promo->alt).'" loading="lazy"') !!}</span>
               </figure>
+@endif
               <h3 class="promo__title">{{ $promo->title }}</h3>
               <p class="gz-plaque promo__plaque">
                 <span class="promo__discount">Скидка - {{ $promo->discount }}</span>
