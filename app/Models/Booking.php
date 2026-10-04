@@ -17,7 +17,6 @@ class Booking extends Model
     use HasFactory;
 
     use LogsChanges;
-
     use Notifiable;
 
     protected function casts(): array
