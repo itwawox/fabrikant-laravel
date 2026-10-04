@@ -7,7 +7,7 @@
                 <div class="col-sm-6 col-sm-offset-3 col-md-12">
                     <div class="welcome_content">
                         <h1 class="welcome-video_content_heading">
-                            {!! Html::picture('/assets/img/logo-fabrikant.webp', '/assets/img/logo-fabrikant.png', 'class="img-responsive" width="541" height="201" alt="ФабрикантЪ — ресторан с собственной пивоварней"') !!}
+                            {!! Html::svg('logo-full', 'welcome-logo', 'ФабрикантЪ — ресторан с собственной пивоварней') !!}
 
                         </h1>
                         <ul class="welcome_content_logo">

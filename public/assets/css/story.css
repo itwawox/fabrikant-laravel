@@ -229,3 +229,10 @@
     text-wrap: balance;
   }
 }
+
+/* Логотип у «Добро пожаловать» — векторный, краской логотипа (как на обложке меню) */
+svg.story__logo {
+  display: block;
+  height: auto;
+  color: #58211c;
+}

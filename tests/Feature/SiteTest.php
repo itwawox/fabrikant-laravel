@@ -168,3 +168,11 @@ it('shows a promo without a photo', function () {
         ->assertSee('<article class="promo" id="bez-foto">', false)
         ->assertDontSee('promo__photo', false);
 });
+
+it('shows the vector logo in the header and the menu ornaments in the footer', function () {
+    $this->get('/contacts')
+        ->assertSee('<svg class="navbar-brand__logo" focusable="false" role="img" aria-label="ФабрикантЪ — на главную"', false)
+        ->assertSee('class="footer-ornament__rule"', false)
+        ->assertSee('Каждый день с 11:00 до 23:00');
+    $this->get('/')->assertSee('class="welcome-logo"', false);
+});

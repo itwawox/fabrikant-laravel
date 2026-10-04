@@ -149,7 +149,7 @@
                 </div>
                 <div class="story__welcome">
                     <p class="story__welcome-text">{{ $texts->get('atmosphere.welcome') }}</p>
-                    {!! Html::picture('/assets/img/logo.webp', '/assets/img/logo.png', 'class="story__logo" width="700" height="260" alt="ФабрикантЪ — ресторан с собственной пивоварней" loading="lazy" decoding="async"') !!}
+                    {!! Html::svg('logo-full', 'story__logo', 'ФабрикантЪ — ресторан с собственной пивоварней') !!}
                 </div>
             </section>
 
