@@ -38,6 +38,22 @@ class Html
     }
 
     /**
+     * Векторная графика фирменного стиля из resources/svg прямо в разметку: так она берёт цвет из CSS
+     * (currentColor) и не требует отдельного запроса. logo — логотип для шапки (без мелкой подписи),
+     * logo-full — с подписью, emblem — джентльмен с кружкой, ornament-rule — линейка с вензелями из меню.
+     */
+    public static function svg(string $name, string $class, ?string $label = null): string
+    {
+        static $cache = [];
+        $svg = $cache[$name] ??= trim((string) file_get_contents(resource_path("svg/{$name}.svg")));
+        // Подпись для экранного диктора — если графика что-то значит; иначе она скрыта от него
+        $a11y = $label !== null ? ' role="img" aria-label="'.e($label).'"' : ' aria-hidden="true"';
+        $svg = (string) preg_replace('/\s(role|aria-label|aria-hidden)="[^"]*"/', '', $svg);
+
+        return (string) preg_replace('/^<svg/', '<svg class="'.e($class).'" focusable="false"'.$a11y, $svg);
+    }
+
+    /**
      * Адрес статического файла из public/ с меткой версии: браузер кэширует файл надолго,
      * а после правки файла метка меняется и он скачивается заново.
      */

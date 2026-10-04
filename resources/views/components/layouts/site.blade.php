@@ -77,7 +77,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">Фабрикантъ</a>
+                <a class="navbar-brand" href="/">{!! Html::svg('logo', 'navbar-brand__logo', 'ФабрикантЪ — на главную') !!}</a>
             </div>
             <div class="collapse navbar-collapse" id="navbar__collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -106,18 +106,24 @@
 @endif
 {{ $slot }}
     <footer class="section_footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-8">
-                    <p class="footer_info">&#169; {{ date('Y') }} Ресторан &quot;ФабрикантЪ&quot; Симферополь.</p>
-                </div>
-                <div class="col-sm-4">
-                    <div class="soc-box">
+        <!-- Последняя полоса, как в печатном меню: джентльмен с кружкой, линейка с вензелями, под ней — где нас найти -->
+        <div class="footer-ornament">
+            {!! Html::svg('emblem', 'footer-ornament__emblem') !!}
+            {!! Html::svg('ornament-rule', 'footer-ornament__rule') !!}
+        </div>
+        <div class="footer-body">
+            <p class="footer-contacts">
+                <span>{{ $site->city() }}, {{ $site->streetAddress() }}</span>
+                <a href="{{ $site->tel() }}">{{ $site->phone() }}</a>
+                <span>Каждый день с {{ $site->opensAt() }} до {{ $site->closesAt() }}</span>
+            </p>
+            <div class="footer-end">
+                <p class="footer_info">&#169; {{ date('Y') }} Ресторан &laquo;ФабрикантЪ&raquo;, {{ $site->city() }}</p>
 @if ($site->vkUrl())
-                        <a target="_blank" rel="noopener" href="{{ $site->vkUrl() }}" title="Ресторан ФабрикантЪ Вконтакте">{!! Html::icon('vk') !!}</a>
-@endif
-                    </div>
+                <div class="soc-box">
+                    <a target="_blank" rel="noopener" href="{{ $site->vkUrl() }}" title="Ресторан ФабрикантЪ Вконтакте" aria-label="ФабрикантЪ во ВКонтакте">{!! Html::icon('vk') !!}</a>
                 </div>
+@endif
             </div>
         </div>
     </footer>
