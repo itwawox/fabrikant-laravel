@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Menu;
 use App\Models\MenuSection;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -12,8 +13,26 @@ class MenuController extends Controller
 {
     public function show(): View
     {
-        $menu = Menu::published()->with(['pages', 'sections.boxes'])->latest('published_at')->first();
+        $menu = Menu::published()->latest('published_at')->first();
         abort_if($menu === null, 503, 'Меню обновляется');
+
+        return $this->render($menu);
+    }
+
+    /**
+     * Меню до публикации — по секретной ссылке из админки (подписана, живёт неделю). Не кэшируется
+     * и закрыто от поисковиков.
+     */
+    public function preview(Menu $menu): Response
+    {
+        abort_unless($menu->pages_count > 0 && $menu->pages()->whereNotNull('width')->exists(), 404);
+
+        return response($this->render($menu))->header('X-Robots-Tag', 'noindex, nofollow');
+    }
+
+    private function render(Menu $menu): View
+    {
+        $menu->load(['pages', 'sections.boxes']);
 
         $disk = Storage::disk('public');
         $dir = $menu->storage_dir;

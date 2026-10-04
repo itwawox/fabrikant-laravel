@@ -17,6 +17,9 @@ Route::middleware(CacheResponse::class)->group(function () {
     Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 });
 
+// Предпросмотр меню до публикации: ссылку с подписью выдаёт админка
+Route::get('/menu/preview/{menu}', [MenuController::class, 'preview'])->middleware('signed')->name('menu.preview');
+
 // Адреса старого сайта. Они напечатаны в QR-кодах и разосланы в соцсетях, поэтому ведут на новые навсегда (301).
 // Якорь (#supy, #happyhours, #foto-fasad) браузер сохраняет сам — сервер его не видит.
 foreach ([

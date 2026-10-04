@@ -24,6 +24,10 @@ jobs:
           path: ~/.composer/cache/files
           key: composer-${{ hashFiles('composer.lock') }}
 
+      # Конвейер PDF меню рисует страницы Ghostscript'ом, как на хостинге; без него тесты меню пропускаются
+      - name: Ghostscript
+        run: sudo apt-get update -q && sudo apt-get install -y -q ghostscript
+
       - run: composer install --no-interaction --no-progress --prefer-dist
 
       - name: Prepare app

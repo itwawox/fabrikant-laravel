@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable([
     'season', 'name', 'status', 'source_pdf_path', 'web_pdf_path', 'pages_count', 'sheet_w_pt', 'sheet_h_pt',
-    'storage_dir', 'published_at', 'scheduled_at', 'processed_at', 'error', 'created_by',
+    'storage_dir', 'carry_over', 'progress_step', 'progress_done', 'progress_total', 'published_at', 'scheduled_at', 'processed_at', 'error', 'created_by',
 ])]
 class Menu extends Model
 {
@@ -26,6 +26,9 @@ class Menu extends Model
         return [
             'status' => MenuStatus::class,
             'pages_count' => 'integer',
+            'carry_over' => 'boolean',
+            'progress_done' => 'integer',
+            'progress_total' => 'integer',
             'sheet_w_pt' => 'float',
             'sheet_h_pt' => 'float',
             'published_at' => 'datetime',
