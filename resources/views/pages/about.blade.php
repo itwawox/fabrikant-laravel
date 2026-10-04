@@ -3,29 +3,25 @@
 @php
     // «О ресторане» — очерк в стиле газеты-меню. Шапка, рубрики, колонтитул и приглашение в конце —
     // те же детали, что в галерее (press.css); своё у очерка — колонки текста, сорта пива,
-    // плашка «Своими руками» и объявление о работе (story.css). Тексты переедут в админку на этапе 6.
-    $phone = ['tel:+79788072001', '+7 978 807 20 01'];
-    $mail = 'info@fabrikant-simf.ru';
+    // плашка «Своими руками» и объявление о работе (story.css). Тексты — из админки («Страницы»).
+    $texts = \App\Support\PageTexts::for('about');
+    $phone = [$site->tel(), $site->phone()];
+    $mail = $site->email();
     // Маршрут в Яндекс Картах до ресторана — тот же, что на странице «Контакты»
-    $route = 'https://yandex.ru/maps/?rtext=~44.957436%2C34.109319&amp;rtt=auto';
-    // Сорта собственной пивоварни — как в печатном меню (страница 1, «Пиво собственного производства»)
-    $beers = [
-        'Пильзенское светлое' => 'алк. 4,8%',
-        'Имбирное красное' => 'алк. 5,6%',
-        'Эль золотой' => 'алк. 5,4%',
-    ];
-    $rubrics = [
+    $route = $site->routeUrl();
+    $rubrics = array_filter([
         'pivovarnya' => 'Пивоварня',
         'kuhnya' => 'Кухня',
         'atmosfera' => 'Атмосфера',
-        'rabota' => 'Работа у нас',
-    ];
+        // Вакансий нет — объявление и пункт «Работа у нас» не показываем
+        'rabota' => $texts->get('job.show') ? 'Работа у нас' : null,
+    ]);
 @endphp
 {{-- Кадр зала стоит прямо в разметке ниже --}}
 <x-layouts.site
-    title="О ресторане | ФабрикантЪ - Ресторан с собственной пивоварней | Симферополь"
-    description="Ресторан-пивоварня ФабрикантЪ в центре Симферополя: пиво собственной пивоварни по чешской технологии, кухня с крымским акцентом, интерьер начала прошлого века и летний сад."
-    image="/assets/img/hero/hall.webp"
+    :title="$texts->title()"
+    :description="$texts->description()"
+    :image="$texts->image()"
     :hero="false"
     :css="['/assets/css/gazette.css', '/assets/css/press.css', '/assets/css/story.css']"
 >
@@ -46,9 +42,9 @@
                     <li aria-current="page">О ресторане</li>
                 </ol>
             </nav>
-            <p class="press-hero__lede">Островок уюта и комфорта в самом центре шумного города. Здесь всё настоящее: пиво из собственной пивоварни, вкуснейшее угощение, стильный интерьер.</p>
+            <p class="press-hero__lede">{{ $texts->get('lede') }}</p>
         </div>
-        <p class="press-hero__running">Ресторан-пивоварня &bull; Симферополь, Киевская, 54 &bull; Каждый день с 11:00 до 23:00</p>
+        <p class="press-hero__running">Ресторан-пивоварня &bull; {{ $site->city() }}, {{ $site->address() }} &bull; Каждый день с {{ $site->opensAt() }} до {{ $site->closesAt() }}</p>
     </section>
 
     <section class="gazette press story">
@@ -69,25 +65,25 @@
                     <h2 class="rubric__title" id="rubric-pivovarnya-title">Пивоварня</h2>
                     <span class="gz-rule" aria-hidden="true"></span>
                 </div>
-                <p class="rubric__lede">Гордость Фабриканта — пиво, сваренное на собственной пивоварне.</p>
+                <p class="rubric__lede">{{ $texts->get('brewery.lede') }}</p>
                 <div class="story__spread">
                     <div class="story__text story__text--lead">
-                        <p class="story__first">Во-первых, это вкусно: свежее пиво из хмеля и солода от лучших производителей, классический рецепт и чешская технология пивоварения.</p>
-                        <p>Во-вторых, это оригинально: ФабрикантЪ угощает сортами, которые можно попробовать только здесь.</p>
-                        <p>И, наконец, это просто красиво — сама пивоварня украшает просторный зал ресторана, а отличное пиво от Фабриканта украшает жизнь наших гостей.</p>
+@foreach ($texts->list('brewery.text') as $paragraph)
+                        <p{!! $loop->first ? ' class="story__first"' : '' !!}>{{ $paragraph }}</p>
+@endforeach
                     </div>
                     <aside class="story__side" aria-label="Сорта собственной пивоварни">
                         <figure class="story-photo">
                             <span class="story-photo__frame">{!! Html::picture('/assets/img/info_img2.webp', '/assets/img/info_img2.jpg', 'width="640" height="349" alt="Барная стойка с пивными кранами и схемой пивоварения на стене" loading="lazy" decoding="async"') !!}</span>
                         </figure>
                         <div class="story-beers">
-                            <p class="story-beers__title">Нефильтрованное, непастеризованное</p>
+                            <p class="story-beers__title">{{ $texts->get('brewery.beers_title') }}</p>
                             <dl class="gz-rows">
-@foreach ($beers as $beer => $strength)
-                                <div class="gz-row"><dt>{{ $beer }}</dt><dd>{{ $strength }}</dd></div>
+@foreach ($texts->list('brewery.beers') as $beer)
+                                <div class="gz-row"><dt>{{ $beer['name'] }}</dt><dd>{{ $beer['note'] }}</dd></div>
 @endforeach
                             </dl>
-                            <p class="story-beers__note">Сезонные сорта — спросите у официанта.</p>
+                            <p class="story-beers__note">{{ $texts->get('brewery.beers_note') }}</p>
                         </div>
                     </aside>
                 </div>
@@ -100,11 +96,12 @@
                     <h2 class="rubric__title" id="rubric-kuhnya-title">Кухня</h2>
                     <span class="gz-rule" aria-hidden="true"></span>
                 </div>
-                <p class="rubric__lede">Классические рецепты с лёгким крымским акцентом.</p>
+                <p class="rubric__lede">{{ $texts->get('kitchen.lede') }}</p>
                 <div class="story__spread story__spread--flip">
                     <div class="story__text story__text--cols">
-                        <p class="story__first">Мы взяли лучшее из традиций русской, немецкой, чешской и австрийской кухонь и адаптировали под местный колорит и привычные вкусы. Мясные блюда, черноморская рыба, богатый выбор салатов и закусок, нежные десерты и сезонные предложения — в меню Фабриканта есть блюда на любой вкус.</p>
-                        <p>Крымские сыры, свежие овощи и зелень, выращенные на полуострове, сочные фрукты, созревшие под южным солнцем, — всё это в меню появилось не случайно. Мы готовим только из самого свежего и натурального, а гостям и жителям Крыма вкуснее то, что родилось на щедрой крымской земле.</p>
+@foreach ($texts->list('kitchen.text') as $paragraph)
+                        <p{!! $loop->first ? ' class="story__first"' : '' !!}>{{ $paragraph }}</p>
+@endforeach
                     </div>
                     <aside class="story__side">
 @if ($kare)
@@ -115,12 +112,11 @@
 @endif
                         <!-- Плашка, как «Метр пива» в меню: что в ресторане делают сами -->
                         <div class="story-plaque">
-                            <p class="story-plaque__title">Своими руками</p>
+                            <p class="story-plaque__title">{{ $texts->get('kitchen.plaque_title') }}</p>
                             <ul class="story-plaque__list">
-                                <li>копчения и соления — в своём цеху</li>
-                                <li>колбаски к пиву</li>
-                                <li>варенье из свежего урожая</li>
-                                <li>хлеб из собственной пекарни</li>
+@foreach ($texts->list('kitchen.plaque') as $item)
+                                <li>{{ $item }}</li>
+@endforeach
                             </ul>
                         </div>
                     </aside>
@@ -135,7 +131,7 @@
                     <h2 class="rubric__title" id="rubric-atmosfera-title">Атмосфера</h2>
                     <span class="gz-rule" aria-hidden="true"></span>
                 </div>
-                <p class="rubric__lede">Её в Фабриканте можно называть отдельным блюдом в меню.</p>
+                <p class="rubric__lede">{{ $texts->get('atmosphere.lede') }}</p>
                 <div class="story__pair">
                     <figure class="story-photo">
                         <span class="story-photo__frame">{!! Html::picture('/assets/img/info_img.webp', '/assets/img/info_img.jpg', 'width="640" height="349" alt="Фасад ресторана вечером: светящаяся вывеска ФабрикантЪ над входом" loading="lazy" decoding="async"') !!}</span>
@@ -147,32 +143,36 @@
                     </figure>
                 </div>
                 <div class="story__text story__text--narrow">
-                    <p class="story__first">Интерьер выполнен в духе начала прошлого века — времени расцвета Крыма как курортной жемчужины. Здесь удобно в любое время года: стильный зимний зал и зелёная летняя площадка вмещают всех, кто хочет окунуться в атмосферу сдержанной роскоши, отведать лучшие блюда и свежайшее пиво.</p>
+@foreach ($texts->list('atmosphere.text') as $paragraph)
+                    <p{!! $loop->first ? ' class="story__first"' : '' !!}>{{ $paragraph }}</p>
+@endforeach
                 </div>
                 <div class="story__welcome">
-                    <p class="story__welcome-text">Добро пожаловать в ресторан-пивоварню ФабрикантЪ!</p>
+                    <p class="story__welcome-text">{{ $texts->get('atmosphere.welcome') }}</p>
                     {!! Html::picture('/assets/img/logo.webp', '/assets/img/logo.png', 'class="story__logo" width="700" height="260" alt="ФабрикантЪ — ресторан с собственной пивоварней" loading="lazy" decoding="async"') !!}
                 </div>
             </section>
 
+@if ($texts->get('job.show'))
             <!-- Работа у нас: газетное объявление -->
             <section class="rubric" id="rubric-rabota" aria-labelledby="rubric-rabota-title">
                 <div class="story-ad">
-                    <h2 class="story-ad__title" id="rubric-rabota-title">Ищем в команду</h2>
-                    <p class="story-ad__lede">Ярких и амбициозных людей, которые хотят работать и зарабатывать.</p>
+                    <h2 class="story-ad__title" id="rubric-rabota-title">{{ $texts->get('job.title') }}</h2>
+                    <p class="story-ad__lede">{{ $texts->get('job.lede') }}</p>
                     <ul class="story-ad__list">
-                        <li>Работа в известном ресторане, где есть место для творчества и роста.</li>
-                        <li>Обучаем и продвигаем своих сотрудников.</li>
-                        <li>Ценим команду и вкладываемся в неё.</li>
+@foreach ($texts->list('job.items') as $item)
+                        <li>{{ $item }}</li>
+@endforeach
                     </ul>
                     <p class="story-ad__contact">Резюме присылайте на <a href="mailto:{{ $mail }}?subject={{ rawurlencode('Резюме') }}" data-goal="about_job_mail">{{ $mail }}</a> или звоните: <a href="{{ $phone[0] }}" data-goal="about_job_call">{{ $phone[1] }}</a>.</p>
                 </div>
             </section>
+@endif
 
             <!-- Чем заканчивается очерк: приходите -->
             <aside class="press-cta" aria-labelledby="press-cta-title">
                 <h2 class="press-cta__title" id="press-cta-title">Ждём вас в гости</h2>
-                <p class="press-cta__text">Симферополь, Киевская,&nbsp;54. Открыто каждый день с&nbsp;11:00 до&nbsp;23:00.</p>
+                <p class="press-cta__text">{{ $site->city() }}, {{ $site->settings->street }},&nbsp;{{ $site->settings->house }}. Открыто каждый день с&nbsp;{{ $site->opensAt() }} до&nbsp;{{ $site->closesAt() }}.</p>
                 <div class="press-cta__actions">
                     <a class="press-cta__action press-cta__action--main" href="{{ $phone[0] }}" data-goal="about_call">
                         <span>Забронировать стол</span>
@@ -187,7 +187,7 @@
             </aside>
 
             <p class="gazette__strip">
-                <span>Симферополь, ул. Киевская, 54.</span>
+                <span>{{ $site->city() }}, {{ $site->streetAddress() }}.</span>
                 <span>тел. <a href="{{ $phone[0] }}">{{ $phone[1] }}</a></span>
                 <span><a href="/menu">Меню ресторана</a></span>
             </p>

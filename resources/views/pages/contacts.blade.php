@@ -1,22 +1,23 @@
 @php
-    // Контакты ресторана. Часы работы — как в карточке ресторана в Яндекс Картах.
-    // На этапе 6 эти данные переедут в настройки сайта в админке.
-    $yandex = 'https://yandex.ru/maps/org/fabrikant/1324964934/';
-    $rows = [
-        'Открыто' => ['', 'ежедневно 11:00–23:00'],
-        'Телефон' => ['tel:+79788072001', '+7 978 807 20 01'],
-        'Почта' => ['mailto:info@fabrikant-simf.ru', 'info@fabrikant-simf.ru'],
-        'PR-служба' => ['mailto:pr@fabrikant-simf.ru', 'pr@fabrikant-simf.ru'],
-        'ВКонтакте' => ['https://vk.com/fabricantsimferopol', 'наша страница'],
-        'Одноклассники' => ['https://ok.ru/group/54607657435147', 'наша группа'],
-        'Яндекс Карты' => [$yandex, 'отзывы и фото'],
-    ];
-    // Маршрут в Яндекс Картах до ресторана (широта, долгота точки из карточки)
-    $route = 'https://yandex.ru/maps/?rtext=~44.957436%2C34.109319&amp;rtt=auto';
+    // Контакты ресторана — из настроек сайта в админке. Часы работы — как в карточке ресторана в Яндекс Картах.
+    $rows = array_filter([
+        'Открыто' => ['', 'ежедневно '.$site->opensAt().'–'.$site->closesAt()],
+        'Телефон' => [$site->tel(), $site->phone()],
+        'Почта' => ['mailto:'.$site->email(), $site->email()],
+        'PR-служба' => $site->prEmail() ? ['mailto:'.$site->prEmail(), $site->prEmail()] : null,
+        'ВКонтакте' => $site->vkUrl() ? [$site->vkUrl(), 'наша страница'] : null,
+        'Одноклассники' => $site->okUrl() ? [$site->okUrl(), 'наша группа'] : null,
+        'Яндекс Карты' => $site->yandexMapsUrl() ? [$site->yandexMapsUrl(), 'отзывы и фото'] : null,
+    ]);
+    // Маршрут в Яндекс Картах до ресторана (широта, долгота точки из настроек)
+    $route = $site->routeUrl();
+    $texts = \App\Support\PageTexts::for('contacts');
 @endphp
 {{-- Главное фото стоит прямо в разметке ниже, предзагрузка фона шапки не нужна --}}
 <x-layouts.site
-    title="Контакты | ФабрикантЪ - Ресторан с собственной пивоварней | Симферополь"
+    :title="$texts->title()"
+    :description="$texts->description()"
+    :image="$texts->image()"
     :hero="false"
     :css="['/assets/css/gazette.css']"
 >
@@ -36,8 +37,8 @@
                     <li><a href="/">Главная</a></li>
                     <li>Контакты</li>
                 </ol>
-                <h1 class="contact__title">Ждём вас в гости</h1>
-                <address class="contact__address">Симферополь, улица Киевская, 54</address>
+                <h1 class="contact__title">{{ $texts->get('title') }}</h1>
+                <address class="contact__address">{{ $site->city() }}, {{ $site->streetAddressFull() }}</address>
                 <hr class="gz-rule">
 
                 <dl class="gz-rows">
@@ -54,13 +55,15 @@
                     <a class="gz-plaque contact__action" href="{{ $rows['Телефон'][0] }}">Позвонить</a>
                     <a class="gz-plaque contact__action" href="{!! $route !!}" target="_blank" rel="noopener">Проложить маршрут</a>
                 </div>
-                <p class="contact__note">Вопрос управляющему, отзыв или пожелание — напишите нам на почту.</p>
+                <p class="contact__note">{{ $texts->get('note') }}</p>
             </div>
 
             <h2 class="contact__map-title">Как нас найти</h2>
             <hr class="gz-rule">
             <div class="contact__map">
-                <iframe src="https://yandex.ru/map-widget/v1/org/fabrikant/1324964934/?ll=34.109319%2C44.957436&amp;z=16" loading="lazy" title="Карта проезда к ресторану ФабрикантЪ"></iframe>
+@if ($site->mapWidgetUrl())
+                <iframe src="{!! $site->mapWidgetUrl() !!}" loading="lazy" title="Карта проезда к ресторану ФабрикантЪ"></iframe>
+@endif
             </div>
         </div>
     </section>

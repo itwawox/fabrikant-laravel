@@ -113,7 +113,9 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="soc-box">
-                        <a target="_blank" rel="noopener" href="https://vk.com/fabricantsimferopol" title="Ресторан ФабрикантЪ Вконтакте">{!! Html::icon('vk') !!}</a>
+@if ($site->vkUrl())
+                        <a target="_blank" rel="noopener" href="{{ $site->vkUrl() }}" title="Ресторан ФабрикантЪ Вконтакте">{!! Html::icon('vk') !!}</a>
+@endif
                     </div>
                 </div>
             </div>
@@ -126,13 +128,14 @@
     <script src="{{ Html::asset($file) }}" defer></script>
 @endforeach
 
+@if ($metrika = $site->metrikaId())
     <!-- Yandex.Metrika counter -->
     <script type="text/javascript" >
         (function (d, w, c) {
             (w[c] = w[c] || []).push(function() {
                 try {
-                    w.yaCounter26918373 = new Ya.Metrika({
-                        id:26918373,
+                    w.yaCounter{{ $metrika }} = new Ya.Metrika({
+                        id:{{ $metrika }},
                         clickmap:true,
                         trackLinks:true,
                         accurateTrackBounce:true,
@@ -153,7 +156,8 @@
             } else { f(); }
         })(document, window, "yandex_metrika_callbacks");
     </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/26918373" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <noscript><div><img src="https://mc.yandex.ru/watch/{{ $metrika }}" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     <!-- /Yandex.Metrika counter -->
+@endif
 </body>
 </html>

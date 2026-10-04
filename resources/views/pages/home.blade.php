@@ -1,5 +1,6 @@
 @use('App\Support\Html')
-<x-layouts.site title="ФабрикантЪ - Ресторан с собственной пивоварней | Симферополь">
+@php($texts = \App\Support\PageTexts::for('home'))
+<x-layouts.site :title="$texts->title()" :description="$texts->description()" :image="$texts->image()">
     <section class="section_welcome" id="section_welcome">
         <div class="container">
             <div class="row">

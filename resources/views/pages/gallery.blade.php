@@ -1,16 +1,17 @@
 @use('App\Support\Html')
 @use('App\Support\Press')
 @php
-    $phone = ['tel:+79788072001', '+7 978 807 20 01'];
+    $phone = [$site->tel(), $site->phone()];
+    $texts = \App\Support\PageTexts::for('gallery');
     // Маршрут в Яндекс Картах до ресторана — тот же, что на странице «Контакты»
-    $route = 'https://yandex.ru/maps/?rtext=~44.957436%2C34.109319&amp;rtt=auto';
+    $route = $site->routeUrl();
 @endphp
 {{-- Галерея «Фотохроника» — иллюстрированное приложение к газете-меню. Фото, рубрики и подписи — из базы.
      Кадр зала стоит прямо в разметке, фоновая шапка не нужна --}}
 <x-layouts.site
-    title="Галерея | ФабрикантЪ - Ресторан с собственной пивоварней | Симферополь"
-    description="Фотографии ресторана-пивоварни ФабрикантЪ в Симферополе: зал с кирпичными стенами и латунью, летний сад с фонтаном, медная пивная башня и блюда кухни."
-    image="/assets/img/hero/stage.webp"
+    :title="$texts->title()"
+    :description="$texts->description()"
+    :image="$texts->image()"
     :hero="false"
     :css="['/assets/css/gazette.css', '/assets/css/press.css']"
 >
@@ -75,7 +76,7 @@
             <!-- Чем заканчивается номер: посмотрели фото — приходите -->
             <aside class="press-cta" aria-labelledby="press-cta-title">
                 <h2 class="press-cta__title" id="press-cta-title">Приходите посмотреть вживую</h2>
-                <p class="press-cta__text">Симферополь, Киевская,&nbsp;54. Открыто каждый день с&nbsp;11:00 до&nbsp;23:00.</p>
+                <p class="press-cta__text">{{ $site->city() }}, {{ $site->settings->street }},&nbsp;{{ $site->settings->house }}. Открыто каждый день с&nbsp;{{ $site->opensAt() }} до&nbsp;{{ $site->closesAt() }}.</p>
                 <div class="press-cta__actions">
                     <a class="press-cta__action press-cta__action--main" href="{{ $phone[0] }}" data-goal="gallery_call">
                         <span>Забронировать стол</span>
@@ -90,8 +91,8 @@
             </aside>
 
             <p class="gazette__strip">
-                <span>Симферополь, ул. Киевская, 54.</span>
-                <span>тел. <a href="tel:+79788072001">+7 978 807 20 01</a></span>
+                <span>{{ $site->city() }}, {{ $site->streetAddress() }}.</span>
+                <span>тел. <a href="{{ $phone[0] }}">{{ $phone[1] }}</a></span>
                 <span><a href="/menu">Меню ресторана</a></span>
             </p>
         </div>
