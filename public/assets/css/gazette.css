@@ -146,7 +146,7 @@
     position: absolute;
     width: clamp(64px, 10vw, 112px);
     aspect-ratio: 179.3 / 132.7;
-    background: var(--gz-ink);
+    background: var(--orn-ink, var(--gz-ink));
     mask: url("../img/ornaments/bracket.svg") center / contain no-repeat;
     pointer-events: none;
   }
