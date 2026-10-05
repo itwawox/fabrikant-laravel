@@ -128,6 +128,12 @@
         </div>
     </footer>
     <a href="#" id="back-to-top" aria-label="Наверх">{!! Html::icon('chevron-up') !!}</a>
+    {{-- Плашка про cookie: их ставят сессия сайта и Яндекс Метрика, а РКН считает такие данные персональными.
+         Страницы кэшируются целиком, поэтому показывает её site.js — пока гость не нажал «Понятно» --}}
+    <aside class="cookie-note" id="cookie-note" aria-label="Файлы cookie" hidden>
+        <p class="cookie-note__text">Сайт использует файлы cookie: они нужны для его работы и для статистики посещений (Яндекс Метрика). Подробнее — в <a href="{{ route('privacy') }}">политике обработки персональных данных</a>.</p>
+        <button type="button" class="cookie-note__ok">Понятно</button>
+    </aside>
 
     <script src="{{ Html::asset('/assets/js/site.js') }}" defer></script>
 @foreach ($js as $file)

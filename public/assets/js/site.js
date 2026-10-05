@@ -23,6 +23,17 @@
         update();
     });
 
+    // Плашка про cookie: показываем, пока гость не нажал «Понятно». Отметку храним в cookie на год —
+    // она работает и там, где localStorage закрыт (приватный режим Safari)
+    var cookieNote = document.getElementById('cookie-note');
+    if (cookieNote && document.cookie.split('; ').indexOf('cookie_ok=1') === -1) {
+        cookieNote.hidden = false;
+        cookieNote.querySelector('.cookie-note__ok').addEventListener('click', function () {
+            document.cookie = 'cookie_ok=1; max-age=31536000; path=/; samesite=lax';
+            cookieNote.hidden = true;
+        });
+    }
+
     // Мобильное меню закрывается клавишей Esc, фокус возвращается на кнопку
     document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape' && collapse.classList.contains('in')) {
