@@ -111,7 +111,7 @@
                         </figure>
 @endif
                         <!-- Плашка, как «Метр пива» в меню: что в ресторане делают сами -->
-                        <div class="story-plaque">
+                        <div class="story-plaque orn-curls">
                             <p class="story-plaque__title">{{ $texts->get('kitchen.plaque_title') }}</p>
                             <ul class="story-plaque__list">
 @foreach ($texts->list('kitchen.plaque') as $item)
@@ -156,8 +156,8 @@
 @if ($texts->get('job.show'))
             <!-- Работа у нас: газетное объявление -->
             <section class="rubric" id="rubric-rabota" aria-labelledby="rubric-rabota-title">
-                <div class="story-ad">
-                    <h2 class="story-ad__title" id="rubric-rabota-title">{{ $texts->get('job.title') }}</h2>
+                <div class="story-ad orn-scroll">
+                    <h2 class="story-ad__title orn-crown" id="rubric-rabota-title">{{ $texts->get('job.title') }}</h2>
                     <p class="story-ad__lede">{{ $texts->get('job.lede') }}</p>
                     <ul class="story-ad__list">
 @foreach ($texts->list('job.items') as $item)
@@ -170,7 +170,7 @@
 @endif
 
             <!-- Чем заканчивается очерк: приходите -->
-            <aside class="press-cta" aria-labelledby="press-cta-title">
+            <aside class="press-cta orn-corners" aria-labelledby="press-cta-title">
                 <h2 class="press-cta__title" id="press-cta-title">Ждём вас в гости</h2>
                 <p class="press-cta__text">{{ $site->city() }}, {{ $site->settings->street }},&nbsp;{{ $site->settings->house }}. Открыто каждый день с&nbsp;{{ $site->opensAt() }} до&nbsp;{{ $site->closesAt() }}.</p>
                 <div class="press-cta__actions">

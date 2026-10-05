@@ -9,6 +9,16 @@
   src: url('../fonts/arkhive.woff2') format('woff2'), url('../fonts/ARKHIVE.TTF') format('truetype');
   font-display: swap;
 }
+/* Цифры ARKHIVE почти не различаются: 8 и 6 читаются как 0 («+7 970 007…» вместо «+7 978 807…»).
+   Цифры берём из Monumento — шрифта плашек меню; size-adjust ровняет их по высоте с буквами ARKHIVE.
+   У AFISHA ноль с вырезом и на телефоне похож на V, поэтому не он */
+@font-face {
+  font-family: 'ARKHIVE';
+  src: url('../fonts/monumento-demibold.woff2') format('woff2'), url('../fonts/A_MONUMENTONR-DEMIBOLD.TTF') format('truetype');
+  unicode-range: U+0030-0039;
+  size-adjust: 82%;
+  font-display: swap;
+}
 @font-face {
   font-family: 'AFISHA';
   src: url('../fonts/afisha.woff2') format('woff2'), url('../fonts/AFISHA.TTF') format('truetype');

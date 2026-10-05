@@ -74,7 +74,7 @@
 
 @endforeach
             <!-- Чем заканчивается номер: посмотрели фото — приходите -->
-            <aside class="press-cta" aria-labelledby="press-cta-title">
+            <aside class="press-cta orn-corners" aria-labelledby="press-cta-title">
                 <h2 class="press-cta__title" id="press-cta-title">Приходите посмотреть вживую</h2>
                 <p class="press-cta__text">{{ $site->city() }}, {{ $site->settings->street }},&nbsp;{{ $site->settings->house }}. Открыто каждый день с&nbsp;{{ $site->opensAt() }} до&nbsp;{{ $site->closesAt() }}.</p>
                 <div class="press-cta__actions">
