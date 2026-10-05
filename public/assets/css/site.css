@@ -376,7 +376,8 @@ button {
   min-height: 70px;
   border-bottom: 1px solid rgba(203, 178, 124, 0.65);
 }
-/* Белая подложка, выезжающая сверху, когда страница прокручена (класс .navbar-inverse ставит site.js) */
+/* Тёмная подложка с золотой чертой, выезжающая сверху, когда страница прокручена или открыто меню
+   (класс .navbar-inverse ставит site.js). Раньше была белой — белая полоса рвала тёмные шапки страниц */
 .navbar:after {
   content: "";
   display: block;
@@ -385,7 +386,8 @@ button {
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: white;
+  background-color: #1c0a02;
+  box-shadow: inset 0 -1px 0 rgb(203 178 124 / .5);
   transform: translateY(-100%);
   transition: transform 0.3s;
   z-index: -999;
@@ -541,7 +543,7 @@ button {
     background-color: #cbb27c;
   }
 }
-/* Цвета: .navbar-default — поверх фото, .navbar-inverse — на белой подложке */
+/* Цвета: .navbar-default — поверх фото, .navbar-inverse — на тёмной подложке */
 .navbar-default .navbar-brand {
   color: #f4f3de;
 }
@@ -557,12 +559,48 @@ button {
 .navbar-inverse:after {
   transform: translateY(0);
 }
-.navbar-inverse .navbar-brand,
+.navbar-inverse .navbar-brand {
+  color: #cbb27c;
+}
 .navbar-inverse .navbar-nav > li > a {
-  color: #1b2d2f;
+  color: #ffffff;
 }
 .navbar-inverse .navbar-toggle .icon-bar {
-  background-color: #1b2d2f;
+  background-color: #ffffff;
+}
+/* Меню на телефоне: пункты с золотыми линейками между ними, внизу — золотая кнопка брони, как в меню */
+.navbar-call {
+  display: none;
+}
+@media (max-width: 767px) {
+  .navbar .navbar-nav > li + li {
+    border-top: 1px solid rgb(203 178 124 / .25);
+  }
+  .navbar .navbar-nav > li > a {
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+  .navbar-call {
+    display: grid;
+    gap: 2px;
+    margin: 6px 0 18px;
+    padding: 12px 16px;
+    background: #cbb27c;
+    color: #270d00;
+    font: 700 18px/1.2 'Old Standard TT', Georgia, serif;
+    letter-spacing: .02em;
+    text-align: center;
+  }
+  .navbar-call:hover,
+  .navbar-call:focus {
+    background: #e3cc96;
+    color: #270d00;
+  }
+  .navbar-call__note {
+    font-size: 14px;
+    font-weight: 400;
+    opacity: .75;
+  }
 }
 .navbar .navbar-brand:hover,
 .navbar .navbar-brand:focus,
@@ -748,19 +786,60 @@ button {
 .welcome-video_content_heading .img-responsive {
   margin: 0 auto;
 }
-.welcome_content_logo {
-  margin-bottom: 0;
-  padding-left: 10px;
-  list-style: none;
+/* Под логотипом — виньетка из печатного меню (вместо иконок вилки и бокала) и два действия:
+   золотая плашка брони, как в меню, и «Меню» строкой с чертой */
+.welcome-ornament {
+  display: block;
+  width: 150px;
+  height: 25px;
+  margin: 18px auto 0;
+  background: #cbb27c;
+  mask: url(../img/ornaments/vignette.svg) center / contain no-repeat;
 }
-.welcome_content_logo > li {
-  display: inline-block;
-  margin-right: 15px;
-  font-size: 35px;
+.welcome-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px 28px;
+  margin: 34px 0 0;
+}
+.welcome-action {
+  display: inline-grid;
+  gap: 2px;
+  min-width: 220px;
+  padding: 12px 20px 10px;
+  color: #ffffff;
+  font: 700 20px/1.2 'Old Standard TT', Georgia, serif;
+  letter-spacing: .03em;
+  box-shadow: inset 0 -1px 0 rgb(203 178 124 / .7);
+  transition: background-color .15s, box-shadow .15s;
+}
+.welcome-action--main {
+  background: #cbb27c;
+  box-shadow: none;
+  color: #270d00;
+}
+.welcome-action__note {
+  font-size: 14px;
+  font-weight: 400;
+  opacity: .75;
+}
+.welcome-action:hover,
+.welcome-action:focus {
+  color: #ffffff;
+  box-shadow: inset 0 -2px 0 #cbb27c;
+}
+.welcome-action--main:hover,
+.welcome-action--main:focus {
+  background: #e3cc96;
+  box-shadow: none;
+  color: #270d00;
 }
 @media (max-width: 767px) {
-  .welcome_content_logo > li {
-    font-size: 25px;
+  .welcome-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
   }
 }
 /* Фон главной: кадр из ролика; на широких экранах site.js подгружает поверх него видео */
@@ -853,6 +932,9 @@ button {
   padding: 15px 0;
   /* Цвет под узором — его средний тон, тот же, что у html: пока узор грузится, подвал не меняет цвет */
   background: #1e1719 url(../img/pattern5.jpg) repeat top center;
+  /* той же антиквой, что навигация: на сайте два шрифта текста, а не пять */
+  font-family: 'Old Standard TT', Georgia, serif;
+  letter-spacing: .02em;
 }
 .section_footer .footer_info {
   margin-bottom: 0;
@@ -977,11 +1059,9 @@ button {
   width: auto;
   transition: color .2s;
 }
-.navbar-default .navbar-brand {
+/* Логотип золотом и над фото, и на тёмной подложке после прокрутки */
+.navbar .navbar-brand {
   color: #cbb27c;
-}
-.navbar-inverse .navbar-brand {
-  color: #58211c;
 }
 .navbar .navbar-brand:hover,
 .navbar .navbar-brand:focus {

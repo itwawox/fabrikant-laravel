@@ -85,6 +85,7 @@
                     <li><a href="{{ route($navRoute, absolute: false) }}"@if (request()->routeIs($navRoute)) aria-current="page"@endif>{{ $navTitle }}</a></li>
 @endforeach
                 </ul>
+                <a class="navbar-call" href="{{ $site->tel() }}">Забронировать стол <span class="navbar-call__note">{{ $site->phone() }}</span></a>
             </div>
         </div>
     </nav>
