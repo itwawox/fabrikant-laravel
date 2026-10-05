@@ -35,12 +35,15 @@ class BookingReceived extends Notification
             ->salutation('Перезвоните гостю, чтобы подтвердить бронь.');
     }
 
+    /**
+     * В Telegram — без имени, телефона и комментария: серверы мессенджера за рубежом, а это была бы
+     * трансграничная передача персональных данных (152-ФЗ, ст. 12). Кто и как связаться — в админке и в письме.
+     */
     public function toTelegram(object $notifiable): string
     {
         $b = $this->booking;
 
-        return "🍺 Бронь с сайта\n{$b->when()} · {$b->guests} чел.\n{$b->name}, {$b->phone}"
-            .($b->comment ? "\n«{$b->comment}»" : '')
-            ."\n\nПерезвоните гостю. Заявки: ".BookingResource::getUrl('index');
+        return "🍺 Бронь с сайта\n{$b->when()} · {$b->guests} чел."
+            ."\n\nИмя и телефон гостя — в заявке: ".BookingResource::getUrl('index');
     }
 }

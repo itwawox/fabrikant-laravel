@@ -65,7 +65,7 @@
                 <div class="booking__trap" aria-hidden="true"><label>Сайт <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
                 <label class="booking__consent">
                     <input type="checkbox" name="consent" value="1" required @checked(old('consent'))>
-                    <span>Согласен на обработку персональных данных по <a href="{{ route('privacy') }}" target="_blank">политике конфиденциальности</a>: имя и телефон нужны, чтобы подтвердить бронь.</span>
+                    <span>Даю <a href="{{ route('consent') }}" target="_blank">согласие на обработку персональных данных</a> — имя и телефон нужны, чтобы подтвердить бронь. С <a href="{{ route('privacy') }}" target="_blank">политикой обработки персональных данных</a> ознакомлен(а).</span>
                 </label>
                 @error('consent')<p class="booking__error booking__field--wide">{{ $message }}</p>@enderror
                 <button class="gz-plaque booking__submit" type="submit">Отправить заявку</button>
