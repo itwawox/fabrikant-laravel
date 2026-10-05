@@ -1053,9 +1053,11 @@
   }
 
   /* Полоса над меню: в виде для чтения вместо содержания с миниатюрами — подсказка про лупу
-     (её разделы заменяют), на телефоне полосы нет совсем: переключателя там нет */
+     (её разделы заменяют), на телефоне полосы нет совсем: переключателя там нет.
+     Подсказка видна и до запуска скрипта: чтение — вид по умолчанию. Раньше она появлялась, когда скрипт
+     ставил data-mode="flat", и сдвигала всё меню на строку вниз (CLS 0,19 на ПК) */
   .menu-view:not([data-mode="book"]) .menu-toc,
-  .menu-view:not([data-mode="flat"]) .menu-view__hint {
+  .menu-view[data-mode="book"] .menu-view__hint {
     display: none;
   }
   @media (hover: none), (max-width: 1023px) {
@@ -1644,10 +1646,11 @@
     min-block-size: 52px;
     padding: 8px 22px 8px 18px;
   }
+  /* подписи на золоте — без прозрачности: полупрозрачные давали контраст 3,6 при норме 4,5 */
   .menu-cta--primary .menu-cta__note,
   .menu-nav__call .menu-nav__note,
   .menu-dock__note {
-    opacity: .72;
+    opacity: 1;
   }
   @media (hover: hover) {
     .menu-cta--primary:hover,

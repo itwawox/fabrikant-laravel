@@ -596,10 +596,10 @@ button {
     background: #e3cc96;
     color: #270d00;
   }
+  /* подпись на золоте — без прозрачности: полупрозрачная давала контраст 3,6 при норме 4,5 */
   .navbar-call__note {
     font-size: 14px;
     font-weight: 400;
-    opacity: .75;
   }
 }
 .navbar .navbar-brand:hover,
@@ -823,6 +823,16 @@ button {
   font-size: 14px;
   font-weight: 400;
   opacity: .75;
+}
+/* на золоте — без прозрачности: полупрозрачная давала контраст 3,6 при норме 4,5 */
+.welcome-action--main .welcome-action__note {
+  opacity: 1;
+}
+/* Рамка фокуса с клавиатуры: смена фона у золотой кнопки на тёмном видео почти незаметна */
+.welcome-action:focus-visible,
+.navbar-call:focus-visible {
+  outline: 2px solid #f4f3de;
+  outline-offset: 3px;
 }
 .welcome-action:hover,
 .welcome-action:focus {
