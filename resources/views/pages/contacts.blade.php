@@ -32,7 +32,7 @@
 
     <section class="gazette contact">
         <div class="gazette__sheet">
-            <div class="contact__card">
+            <div class="contact__card orn-corners">
                 <ol class="contact__crumbs">
                     <li><a href="/">Главная</a></li>
                     <li>Контакты</li>

@@ -76,25 +76,100 @@
   color: var(--gz-ink);
 }
 
-/* Линейка с ромбом */
+/* Орнаменты вырезаны из PDF типографии (меню осени 2026) векторами — public/assets/img/ornaments.
+   Рисуем их маской: орнамент берёт цвет текста (currentColor) и одинаково работает на белом и на тёмном. */
+
+/* Линейка, как под заголовками в меню: концовки-ключи по краям, виньетка с ромбами посередине */
 .gz-rule {
+  --gz-knot: 37px;
   position: relative;
-  height: 1px;
+  height: 14px;
   margin: 0;
   border: 0;
   overflow: visible;
-  background: var(--gz-ink);
+  color: var(--gz-ink);
+  background: none;
+  opacity: 1;
 }
+.gz-rule::before,
 .gz-rule::after {
   content: "";
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 9px;
-  height: 9px;
-  background: var(--gz-ink);
-  outline: 5px solid var(--gz-paper);
-  transform: translate(-50%, -50%) rotate(45deg);
+  inset: 0;
+  background: currentColor;
+}
+.gz-rule::before {
+  /* линия не доходит до виньетки — между ними просвет, как в наборе */
+  mask:
+    url("../img/ornaments/knot-left.svg") left center / var(--gz-knot) auto no-repeat,
+    url("../img/ornaments/knot-right.svg") right center / var(--gz-knot) auto no-repeat,
+    linear-gradient(to right, #000 calc(50% - 58px), transparent 0 calc(50% + 58px), #000 0) center / calc(100% - 2 * var(--gz-knot) + 2px) 1px no-repeat;
+}
+.gz-rule::after {
+  mask: url("../img/ornaments/vignette.svg") center / auto 14px no-repeat;
+}
+/* У заголовка рубрики линейки слева и справа от названия: ключ смотрит наружу, виньетки нет */
+.rubric__head .gz-rule::after {
+  content: none;
+}
+.rubric__head .gz-rule:first-child::before {
+  mask:
+    url("../img/ornaments/knot-left.svg") left center / var(--gz-knot) auto no-repeat,
+    linear-gradient(#000 0 0) right center / calc(100% - var(--gz-knot) + 2px) 1px no-repeat;
+}
+.rubric__head .gz-rule:last-child::before {
+  mask:
+    url("../img/ornaments/knot-right.svg") right center / var(--gz-knot) auto no-repeat,
+    linear-gradient(#000 0 0) left center / calc(100% - var(--gz-knot) + 2px) 1px no-repeat;
+}
+
+/* Рамка-свиток, как вокруг «Салатов» в меню. Углы с завитками не растягиваются, тянутся только прямые
+   стороны (border-image). Цвет зашит в файл (краска --gz-ink): border-image не умеет currentColor */
+.gazette .orn-scroll {
+  border: 12px solid transparent;
+  border-radius: 0;
+  outline: 0;
+  border-image: url("../img/ornaments/scroll.svg") 40 140 / 20px 70px / 4px 0 stretch;
+}
+
+/* Уголки с ключом, как у «Горки камчатских креветок»: слева снизу и справа сверху.
+   Вместо внутренней линии двойной рамки: снаружи остаётся одна линия, внутри — уголки.
+   На телефоне уголкам места нет (они ложатся на текст) — там остаётся двойная рамка */
+@media (min-width: 768px) {
+  .gazette .orn-corners {
+    position: relative;
+    outline: 0;
+  }
+  .orn-corners::before,
+  .orn-corners::after {
+    content: "";
+    position: absolute;
+    width: clamp(64px, 10vw, 112px);
+    aspect-ratio: 179.3 / 132.7;
+    background: var(--gz-ink);
+    mask: url("../img/ornaments/bracket.svg") center / contain no-repeat;
+    pointer-events: none;
+  }
+  .orn-corners::before {
+    left: 14px;
+    bottom: 14px;
+  }
+  .orn-corners::after {
+    right: 14px;
+    top: 14px;
+    transform: scale(-1);
+  }
+}
+
+/* Корона-завиток над заголовком, как над «Супами» */
+.orn-crown::before {
+  content: "";
+  display: block;
+  width: min(150px, 60%);
+  aspect-ratio: 90.2 / 19.6;
+  margin: 0 auto 12px;
+  background: currentColor;
+  mask: url("../img/ornaments/crown.svg") center / contain no-repeat;
 }
 
 /* Тёмная плашка с тонкой рамкой внутри — как «Метр пива» в меню */
@@ -106,6 +181,21 @@
   color: var(--gz-paper);
   text-align: center;
   font-family: var(--gz-slab);
+}
+/* Завитки по бокам плашки, как у «Приглашаем на обед». Только у плашек-вывесок, не у кнопок */
+.orn-curls {
+  position: relative;
+  padding-inline: 40px;
+}
+.orn-curls::before {
+  content: "";
+  position: absolute;
+  inset: 14px 14px;
+  background: currentColor;
+  mask:
+    url("../img/ornaments/curl-left.svg") left center / auto min(100%, 84px) no-repeat,
+    url("../img/ornaments/curl-right.svg") right center / auto min(100%, 84px) no-repeat;
+  pointer-events: none;
 }
 
 /* Строки с отточием, как позиции в меню: «Название..........значение» */
@@ -259,6 +349,29 @@
   letter-spacing: .12em;
   font-size: 15px;
 }
+/* По краям полосы — концовки-ключи, как в подвале листа меню */
+.gazette__strip {
+  position: relative;
+  padding-inline: 66px;
+}
+.gazette__strip::before,
+.gazette__strip::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 37px;
+  height: 10px;
+  translate: 0 -50%;
+  background: currentColor;
+}
+.gazette__strip::before {
+  left: 16px;
+  mask: url("../img/ornaments/knot-left.svg") center / contain no-repeat;
+}
+.gazette__strip::after {
+  right: 16px;
+  mask: url("../img/ornaments/knot-right.svg") center / contain no-repeat;
+}
 .gazette__strip a:focus-visible {
   outline: 2px solid #fff;
   outline-offset: 3px;
@@ -317,8 +430,14 @@
     font-size: 16px;
   }
   .gazette__strip {
+    padding-inline: 16px;
     letter-spacing: .04em;
     font-size: 14px;
+  }
+  /* на телефоне строки полосы переносятся — концовкам места нет */
+  .gazette__strip::before,
+  .gazette__strip::after {
+    content: none;
   }
 }
 
