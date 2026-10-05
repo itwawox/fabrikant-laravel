@@ -31,13 +31,20 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->passwordReset()
             ->brandName('ФабрикантЪ')
+            // Фирменный вид: логотип сайта и его фавикон; ресурсы, права и маршруты не трогаем
+            ->brandLogo(fn () => view('filament.brand-logo', ['color' => '#58211c']))
+            ->darkModeBrandLogo(fn () => view('filament.brand-logo', ['color' => '#cbb27c']))
+            ->brandLogoHeight('2.75rem')
+            ->favicon(asset('assets/favicon/favicon.png'))
             ->navigationGroups(['Акции', 'Галерея', 'Сайт'])
             // Очередь задач стоит — предупреждение вверху любой страницы, а не вечная «Обработка…»
             ->renderHook(PanelsRenderHook::PAGE_START, fn (): string => QueueHealth::stalled()
                 ? view('filament.queue-stalled')->render()
                 : '')
+            // Основной цвет — глубокое золото кнопки брони на сайте: на кнопках админки с белым текстом
+            // светлое золото сайта (#cbb27c) не читалось бы
             ->colors([
-                'primary' => Color::hex('#c3850d'),
+                'primary' => Color::hex('#a8823a'),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
