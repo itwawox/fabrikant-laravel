@@ -10,13 +10,17 @@
                             {!! Html::svg('logo-full', 'welcome-logo', 'ФабрикантЪ — ресторан с собственной пивоварней') !!}
 
                         </h1>
-                        <ul class="welcome_content_logo">
-                            <li>{!! Html::icon('dash') !!}</li>
-                            <li>{!! Html::icon('fork') !!}</li>
-                            <li>{!! Html::icon('wineglass') !!}</li>
-                            <li>{!! Html::icon('knife') !!}</li>
-                            <li>{!! Html::icon('dash') !!}</li>
-                        </ul>
+                        <span class="welcome-ornament" aria-hidden="true"></span>
+                        <p class="welcome-actions">
+                            <a class="welcome-action welcome-action--main" href="{{ $site->tel() }}">
+                                <span>Забронировать стол</span>
+                                <span class="welcome-action__note">{{ $site->phone() }}</span>
+                            </a>
+                            <a class="welcome-action" href="/menu">
+                                <span>Меню ресторана</span>
+                                <span class="welcome-action__note">кухня и своя пивоварня</span>
+                            </a>
+                        </p>
                     </div>
                 </div>
             </div>

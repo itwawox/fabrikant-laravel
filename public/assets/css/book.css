@@ -1735,28 +1735,6 @@
   color: var(--gz-paper);
 }
 
-/* Шапка сайта на странице меню после прокрутки — не белая, а тёмная, как стол, с золотой чертой:
-   белая полоса над тёмной страницей рвала её на две части. Правила site.css без слоёв — и эти тоже */
-.navbar.navbar-inverse:after {
-  background: var(--gz-table);
-  box-shadow: inset 0 -1px 0 var(--gz-gold-line);
-}
-.navbar.navbar-inverse .navbar-nav > li > a:not([aria-current="page"]) {
-  color: var(--gz-paper);
-}
-/* Логотип на тёмной шапке меню — золотом, как и наверху страницы */
-.navbar.navbar-inverse .navbar-brand {
-  color: var(--gz-gold);
-}
-.navbar.navbar-inverse .navbar-toggle .icon-bar {
-  background-color: var(--gz-paper);
-}
-@media (hover: hover) {
-  .navbar.navbar-inverse .navbar-nav > li > a:hover {
-    color: var(--gz-gold);
-  }
-}
-
 @layer gz-components {
   /* Кнопки листания — инструменты, тише главной кнопки: тонкая рамка, золото при наведении */
   .menu-view[data-mode="book"] .book__btn {

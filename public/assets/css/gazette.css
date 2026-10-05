@@ -16,11 +16,13 @@
   --gz-grey: #5a504b;
   --gz-paper: #fff;
   --gz-strip: #2a2a2a;
-  /* маджента — вторая краска меню: ею напечатаны гравюры и фотографии */
-  --gz-spot: #d8187c;
+  /* вторая краска — кармин (была маджента меню: на сайте она читалась неоном, decisions.md 2026-10-05).
+     Её же берёт анимация «печати» фото в галерее (gallery/plates.js) */
+  --gz-spot: #a3201d;
   /* тёмная поверхность, на которой лежит газета */
   --gz-table: #1c0a02;
-  --gz-type: "Courier New", Courier, monospace;
+  /* текст — антиквой по образцу русского набора XIX века; машинопись осталась только в строках с отточием */
+  --gz-type: "Old Standard TT", Georgia, serif;
   --gz-display: "AFISHA", "Monumento Promo", Georgia, serif;
   --gz-slab: "Monumento Promo", Georgia, serif;
   /* золото — краска главной кнопки, как «Забронировать стол» в меню */
@@ -29,14 +31,6 @@
   --gz-gold-line: rgb(203 178 124 / .5);
 }
 
-/* Страницы-газеты (акции, контакты, о ресторане, галерея, 404, бронь): текст антиквой Old Standard TT
-   вместо машинописи, вторая краска — кармин вместо маджента (decisions.md, 2026-10-05).
-   Меню (book.css) живёт на своих переменных в :root и остаётся как было */
-.gazette,
-.press-hero {
-  --gz-type: "Old Standard TT", Georgia, serif;
-  --gz-spot: #a3201d;
-}
 /* Строки с отточием — машинописью, как цены в меню */
 .gazette .gz-rows {
   font-family: "Courier New", Courier, monospace;
@@ -696,7 +690,7 @@
   height: 9px;
   margin-right: 8px;
   border-radius: 50%;
-  background: var(--gz-spot);
+  background: rgb(var(--promo-pulse));
   vertical-align: 1px;
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -705,8 +699,12 @@
   }
 }
 @keyframes promo-pulse {
-  0% { box-shadow: 0 0 0 0 rgb(216 24 124 / .7); }
-  70%, 100% { box-shadow: 0 0 0 9px rgb(216 24 124 / 0); }
+  0% { box-shadow: 0 0 0 0 rgb(var(--promo-pulse) / .7); }
+  70%, 100% { box-shadow: 0 0 0 9px rgb(var(--promo-pulse) / 0); }
+}
+/* Точка «идёт сейчас» — золотом: она всегда на тёмном (плашка акции или стол меню), кармин там тонет */
+.promo-now {
+  --promo-pulse: 203 178 124;
 }
 
 /* В меню: на тёмном столе, в одной строке с переключателем вида (.menu-tools в book.css задаёт отступы и линию) */
