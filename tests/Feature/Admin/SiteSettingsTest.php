@@ -28,7 +28,8 @@ it('changes contacts on every page from the settings page', function () {
         ->assertSee('ежедневно 10:00–23:00')
         ->assertDontSee('PR-служба');
     $this->get('/about')->assertSee('Симферополь, Пушкина, 1 &bull; Каждый день с 10:00 до 23:00', false);
-    $this->get('/promos')->assertSee('Симферополь, ул. Пушкина, 1.');
+    // Полосы с адресом на «Акциях» больше нет — адрес и телефон везде есть в подвале
+    $this->get('/promos')->assertSee('<span>Симферополь, ул. Пушкина, 1</span>', false)->assertSee('+7 978 000 11 22');
 });
 
 it('turns the Metrika counter off and on with another number', function () {

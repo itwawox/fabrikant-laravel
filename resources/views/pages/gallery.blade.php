@@ -90,11 +90,6 @@
                 <p class="press-cta__route"><a href="{!! $route !!}" target="_blank" rel="noopener" data-goal="gallery_route">Проложить маршрут в Яндекс Картах</a></p>
             </aside>
 
-            <p class="gazette__strip">
-                <span>{{ $site->city() }}, {{ $site->streetAddress() }}.</span>
-                <span>тел. <a href="{{ $phone[0] }}">{{ $phone[1] }}</a></span>
-                <span><a href="/menu">Меню ресторана</a></span>
-            </p>
         </div>
     </section>
     </main>
