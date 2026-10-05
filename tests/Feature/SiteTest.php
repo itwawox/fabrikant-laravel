@@ -176,3 +176,10 @@ it('shows the vector logo in the header and the menu ornaments in the footer', f
         ->assertSee('Каждый день с 11:00 до 23:00');
     $this->get('/')->assertSee('class="welcome-logo"', false);
 });
+
+it('carries a hidden cookie note that links to the privacy policy', function () {
+    // Показывает её site.js, пока нет отметки «Понятно»: страница кэшируется целиком и одинакова для всех
+    $this->get('/promos')
+        ->assertSee('<aside class="cookie-note" id="cookie-note" aria-label="Файлы cookie" hidden>', false)
+        ->assertSee('href="'.route('privacy').'"', false);
+});

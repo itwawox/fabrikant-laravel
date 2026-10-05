@@ -24,7 +24,10 @@ class BookingController extends Controller
 
     public static function available(SiteSettings $settings): bool
     {
-        return $settings->booking_enabled && PageTexts::for('privacy')->get('text');
+        // Без политики и отдельного текста согласия (152-ФЗ, ст. 9 и 18.1) принимать заявки нельзя
+        $texts = PageTexts::for('privacy');
+
+        return $settings->booking_enabled && $texts->get('text') && $texts->get('consent');
     }
 
     public function show(): View
@@ -88,6 +91,15 @@ class BookingController extends Controller
         $text = PageTexts::for('privacy')->get('text');
         abort_unless((bool) $text, 404);
 
-        return view('pages.privacy', ['text' => $text]);
+        return view('pages.privacy', ['text' => $text, 'heading' => 'Политика обработки персональных данных']);
+    }
+
+    /** Согласие на обработку персональных данных — отдельный документ, на него ведёт галочка в форме брони */
+    public function consent(): View
+    {
+        $text = PageTexts::for('privacy')->get('consent');
+        abort_unless((bool) $text, 404);
+
+        return view('pages.privacy', ['text' => $text, 'heading' => 'Согласие на обработку персональных данных']);
     }
 }

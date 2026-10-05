@@ -14,7 +14,7 @@ use Livewire\Livewire;
 
 function enableBooking(): void
 {
-    Page::create(['key' => 'privacy', 'content' => ['text' => "ООО «Пример», ИНН 0000000000.\n\nДанные храним 90 дней."]]);
+    Page::updateOrCreate(['key' => 'privacy'], ['content' => ['text' => "ООО «Пример», ИНН 0000000000.\n\nДанные храним 90 дней.", 'consent' => 'Даю согласие ООО «Пример».']]);
     $settings = app(SiteSettings::class);
     $settings->booking_enabled = true;
     $settings->save();
@@ -29,10 +29,26 @@ function bookingForm(array $overrides = []): array
     ];
 }
 
-it('is off by default and cannot be switched on without a privacy policy', function () {
+it('is off by default even though the policy and the consent are published', function () {
+    $this->get('/booking')->assertNotFound();
+    $this->get('/contacts')->assertDontSee('Заявка онлайн');
+    // Первые редакции записала миграция: оператор — ООО «Центринвест», согласие — отдельной страницей
+    $this->get('/privacy')->assertOk()->assertSee('ИНН 9103013181')->assertSee('<h2 class="privacy__heading">1. Общие положения</h2>', false);
+    $this->get('/consent')->assertOk()->assertSee('Согласие на обработку персональных данных');
+});
+
+it('cannot take bookings without a policy or a separate consent', function () {
+    $settings = app(SiteSettings::class);
+    $settings->booking_enabled = true;
+    $settings->save();
+
+    Page::where('key', 'privacy')->update(['content' => ['text' => 'Политика', 'consent' => '']]);
+    $this->get('/booking')->assertNotFound();
+    $this->get('/consent')->assertNotFound();
+
+    Page::where('key', 'privacy')->update(['content' => ['text' => '', 'consent' => 'Согласие']]);
     $this->get('/booking')->assertNotFound();
     $this->get('/privacy')->assertNotFound();
-    $this->get('/contacts')->assertDontSee('Заявка онлайн');
 });
 
 it('accepts a booking and notifies by mail and Telegram', function () {
@@ -58,10 +74,13 @@ it('sends the Telegram message through the bot when it is configured', function 
     config(['services.telegram.bot_token' => 'TOKEN', 'services.telegram.chat_id' => '-100500']);
     Http::fake(['api.telegram.org/*' => Http::response(['ok' => true])]);
 
-    Notification::route(TelegramChannel::class, '-100500')->notifyNow(new BookingReceived(Booking::factory()->create()), [TelegramChannel::class]);
+    $booking = Booking::factory()->create(['guests' => 4]);
+    Notification::route(TelegramChannel::class, '-100500')->notifyNow(new BookingReceived($booking), [TelegramChannel::class]);
 
+    // Без имени и телефона: Telegram за рубежом, это была бы трансграничная передача персональных данных
     Http::assertSent(fn ($request) => $request->url() === 'https://api.telegram.org/botTOKEN/sendMessage'
-        && $request['chat_id'] === '-100500' && str_contains($request['text'], '4 чел.'));
+        && $request['chat_id'] === '-100500' && str_contains($request['text'], '4 чел.')
+        && ! str_contains($request['text'], $booking->phone) && ! str_contains($request['text'], $booking->name));
 });
 
 it('requires consent and valid fields', function () {

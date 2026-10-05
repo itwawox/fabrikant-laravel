@@ -22,6 +22,7 @@ Route::middleware(CacheResponse::class)->group(function () {
 Route::get('/booking', [BookingController::class, 'show'])->name('booking');
 Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
 Route::get('/privacy', [BookingController::class, 'privacy'])->name('privacy');
+Route::get('/consent', [BookingController::class, 'consent'])->name('consent');
 
 // Предпросмотр меню до публикации: ссылку с подписью выдаёт админка
 Route::get('/menu/preview/{menu}', [MenuController::class, 'preview'])->middleware('signed')->name('menu.preview');

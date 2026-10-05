@@ -975,6 +975,76 @@ button {
   color: #1b1d1e;
 }
 
+/* ---------- Плашка про cookie ----------
+   Тёмная, как шапка после прокрутки: двойная золотая линейка сверху, «Понятно» — золотой плашкой, как бронь */
+.cookie-note {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  max-width: 460px;
+  padding: 16px 20px;
+  border-top: 3px double #cbb27c;
+  background: #1c0a02;
+  box-shadow: inset 0 0 0 1px rgb(203 178 124 / .35), 0 12px 32px rgb(0 0 0 / .35);
+  color: #f4f3de;
+  font: 15px/1.45 'Old Standard TT', Georgia, serif;
+  letter-spacing: .01em;
+}
+.cookie-note[hidden] {
+  display: none;
+}
+.cookie-note__text {
+  margin: 0;
+}
+.cookie-note__text a {
+  color: #cbb27c;
+  font: inherit;
+  letter-spacing: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.cookie-note__text a:hover,
+.cookie-note__text a:focus {
+  color: #e3cc96;
+}
+.cookie-note__ok {
+  flex: none;
+  padding: 10px 20px;
+  border: 0;
+  background: #cbb27c;
+  color: #270d00;
+  font: 700 16px/1.2 'Old Standard TT', Georgia, serif;
+  cursor: pointer;
+  transition: background-color .15s;
+}
+.cookie-note__ok:hover,
+.cookie-note__ok:focus-visible {
+  background: #e3cc96;
+}
+.cookie-note__ok:focus-visible {
+  outline: 2px solid #f4f3de;
+  outline-offset: 3px;
+}
+@media (max-width: 767px) {
+  .cookie-note {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    max-width: none;
+    font-size: 14px;
+  }
+}
+/* На странице меню у телефона и планшета внизу кнопка брони — плашка встаёт над ней */
+@media (max-width: 1023px) {
+  body:has(.menu-dock) .cookie-note {
+    bottom: 84px;
+  }
+}
+
 /* ---------- Фирменная графика: векторный логотип и вензели меню ----------
    Цвет — currentColor: золото на тёмном, коричневая краска логотипа на белой шапке */
 .navbar-brand {
