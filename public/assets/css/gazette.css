@@ -73,6 +73,10 @@
     box-shadow: none;
   }
 }
+/* подпись на золотой кнопке — без прозрачности (контраст 3,6 → 8,9) */
+.gazette .press-cta__action--main .press-cta__note {
+  opacity: 1;
+}
 .gazette .press-cta__route a {
   color: var(--gz-gold);
 }
