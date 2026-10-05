@@ -52,11 +52,6 @@
             <p>Акции не суммируются с другими акциями и скидками ресторана и действуют только на территории ресторана (на вынос не распространяются).</p>
           </div>
 
-          <p class="gazette__strip">
-            <span>{{ $site->city() }}, {{ $site->streetAddress() }}.</span>
-            <span>тел. <a href="{{ $site->tel() }}">{{ $site->phone() }}</a></span>
-            <span><a href="/menu">Меню ресторана</a></span>
-          </p>
         </div>
       </section>
 
